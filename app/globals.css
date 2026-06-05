@@ -1,0 +1,94 @@
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #070707;
+  color: white;
+}
+a { color: inherit; text-decoration: none; }
+.page { min-height: 100vh; }
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 22px 8%;
+  border-bottom: 1px solid rgba(255,255,255,.12);
+  background: rgba(0,0,0,.6);
+  position: sticky;
+  top: 0;
+  backdrop-filter: blur(10px);
+  z-index: 10;
+}
+.brand { font-weight: 900; letter-spacing: 1px; color: #f5c542; }
+.navlinks { display: flex; gap: 22px; color: #ddd; font-size: 14px; }
+.hero {
+  padding: 80px 8% 50px;
+  display: grid;
+  grid-template-columns: 1.1fr .9fr;
+  gap: 40px;
+  align-items: center;
+}
+.eyebrow { color: #f5c542; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; }
+h1 { font-size: clamp(44px, 7vw, 86px); margin: 12px 0; line-height: .95; }
+.subtitle { color: #cfcfcf; font-size: 20px; line-height: 1.5; max-width: 680px; }
+.buttons { display: flex; gap: 14px; margin-top: 28px; flex-wrap: wrap; }
+.btn {
+  padding: 14px 20px;
+  border-radius: 12px;
+  font-weight: 800;
+  border: 1px solid rgba(255,255,255,.18);
+  background: #f5c542;
+  color: #080808;
+}
+.btn.secondary { background: transparent; color: white; }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  padding: 30px 8% 70px;
+}
+.card {
+  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.04));
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 24px;
+  padding: 24px;
+  box-shadow: 0 20px 60px rgba(0,0,0,.25);
+}
+.card h2, .card h3 { margin-top: 0; }
+.stat { color: #f5c542; font-size: 44px; font-weight: 900; }
+.muted { color: #bdbdbd; line-height: 1.5; }
+.section { padding: 40px 8%; }
+.mode-list { display: grid; gap: 14px; }
+.pill {
+  display: inline-block;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(245,197,66,.14);
+  color: #f5c542;
+  font-weight: 800;
+  font-size: 13px;
+}
+.game-shell {
+  padding: 50px 8%;
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 24px;
+}
+.draw-box {
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+.draw { font-size: 38px; font-weight: 900; margin: 10px 0; }
+.small { font-size: 13px; color: #aaa; }
+table { width: 100%; border-collapse: collapse; }
+td, th { padding: 14px; border-bottom: 1px solid rgba(255,255,255,.12); text-align: left; }
+th { color: #f5c542; }
+@media (max-width: 850px) {
+  .hero, .grid, .game-shell { grid-template-columns: 1fr; }
+  .nav { padding: 18px 5%; }
+  .navlinks { gap: 10px; font-size: 12px; }
+}
