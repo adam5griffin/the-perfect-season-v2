@@ -9,7 +9,7 @@ export default function SportGame({ params }: { params: { sport: SportKey } }) {
   const [team, setTeam] = useState(() => randomItem(sport.teams));
   const [era, setEra] = useState(() => randomItem(sport.eras));
   const [mode, setMode] = useState<'casual' | 'ultimate'>('casual');
-  const [reSpins, setReSpins] = useState(sport.reSpins);
+  const [reSpins, setReSpins] = useState<number>(sport.reSpins);
 
   const currentReSpins = mode === 'ultimate' ? 0 : reSpins;
 
