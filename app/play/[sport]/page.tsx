@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useParams } from 'next/navigation';
 import Nav from '../../../components/Nav';
 import { getTeamColors } from '../../../lib/teamColors';
+import { getTeamFont } from '../../../lib/teamFonts';
 import {
   sports,
   SportKey,
@@ -38,7 +39,9 @@ function getPlayerSlotOptions(player: Player, rosterSlots: readonly string[]) {
     if (rosterSlots.includes('6th Man')) options.push('6th Man');
   }
 
-  if (position === 'QB' && rosterSlots.includes('QB')) options.push('QB');
+  if (position === 'QB' && rosterSlots.includes('QB')) {
+    options.push('QB');
+  }
 
   if (position === 'RB') {
     if (rosterSlots.includes('RB')) options.push('RB');
@@ -66,7 +69,9 @@ function getPlayerSlotOptions(player: Player, rosterSlots: readonly string[]) {
 
   if (position === 'SP') {
     rosterSlots.forEach((slot) => {
-      if (slot.startsWith('SP')) options.push(slot);
+      if (slot.startsWith('SP')) {
+        options.push(slot);
+      }
     });
   }
 
@@ -97,7 +102,9 @@ function findOpenRosterSlot(
 }
 
 function calculateAverageRating(players: Player[]) {
-  if (players.length === 0) return 0;
+  if (players.length === 0) {
+    return 0;
+  }
 
   const total = players.reduce((sum, player) => sum + player.rating, 0);
   return Math.round(total / players.length);
@@ -238,6 +245,7 @@ export default function SportGame() {
   );
 
   const colors = getTeamColors(selectedSeason.team);
+  const teamFont = getTeamFont(selectedSeason.team);
 
   const [mode, setMode] = useState<'casual' | 'ultimate'>('casual');
   const [reSpins, setReSpins] = useState<number>(sport.reSpins);
@@ -439,7 +447,17 @@ Play now: https://the-perfect-season-v2.vercel.app`;
             {mode === 'ultimate' ? 'Ultimate Mode' : 'Casual Mode'}
           </p>
 
-          <div className="draw">{selectedSeason.displayName}</div>
+          <div
+            className="draw"
+            style={{
+              fontFamily: teamFont.fontFamily,
+              letterSpacing: teamFont.letterSpacing,
+              textTransform: teamFont.textTransform,
+              fontStyle: teamFont.fontStyle || 'normal',
+            }}
+          >
+            {selectedSeason.displayName}
+          </div>
 
           {selectedSeason.isFeatured && (
             <span className="pill">
