@@ -16,46 +16,96 @@ function isValidSport(value: string): value is SportKey {
   return value === 'nba' || value === 'nfl' || value === 'mlb';
 }
 
-function findRosterSlot(player: Player, rosterSlots: readonly string[]) {
+function createEmptyRoster(
+  rosterSlots: readonly string[]
+): Record<string, Player | null> {
+  return Object.fromEntries(
+    rosterSlots.map((slot) => [slot, null])
+  ) as Record<string, Player | null>;
+}
+
+function getPlayerSlotOptions(player: Player, rosterSlots: readonly string[]) {
   const position = player.position;
 
+  const options: string[] = [];
+
   if (rosterSlots.includes(position)) {
-    return position;
+    options.push(position);
   }
 
-  if (position === 'WR' && rosterSlots.includes('WR1')) {
-    return 'WR1';
+  // NBA fallback logic
+  if (position === 'PG' && rosterSlots.includes('PG')) options.push('PG');
+  if (position === 'SG' && rosterSlots.includes('SG')) options.push('SG');
+  if (position === 'SF' && rosterSlots.includes('SF')) options.push('SF');
+  if (position === 'PF' && rosterSlots.includes('PF')) options.push('PF');
+  if (position === 'C' && rosterSlots.includes('C')) options.push('C');
+
+  if (
+    ['PG', 'SG', 'SF', 'PF', 'C'].includes(position) &&
+    rosterSlots.includes('6th Man')
+  ) {
+    options.push('6th Man');
   }
 
-  if (position === 'RB' && rosterSlots.includes('RB')) {
-    return 'RB';
+  // NFL fallback logic
+  if (position === 'QB' && rosterSlots.includes('QB')) options.push('QB');
+  if (position === 'RB') {
+    if (rosterSlots.includes('RB')) options.push('RB');
+    if (rosterSlots.includes('FLEX')) options.push('FLEX');
   }
 
-  if (position === 'TE' && rosterSlots.includes('TE')) {
-    return 'TE';
+  if (position === 'WR') {
+    if (rosterSlots.includes('WR1')) options.push('WR1');
+    if (rosterSlots.includes('WR2')) options.push('WR2');
+    if (rosterSlots.includes('FLEX')) options.push('FLEX');
   }
 
-  if (position === 'QB' && rosterSlots.includes('QB')) {
-    return 'QB';
+  if (position === 'TE') {
+    if (rosterSlots.includes('TE')) options.push('TE');
+    if (rosterSlots.includes('FLEX')) options.push('FLEX');
   }
 
   if (position === 'OL' && rosterSlots.includes('Offensive Line')) {
-    return 'Offensive Line';
+    options.push('Offensive Line');
   }
 
   if (position === 'DEF' && rosterSlots.includes('Team Defense')) {
-    return 'Team Defense';
+    options.push('Team Defense');
   }
 
-  if (position === 'RP' && rosterSlots.includes('Bullpen')) {
-    return 'Bullpen';
+  // MLB fallback logic
+  if (position === 'SP') {
+    rosterSlots.forEach((slot) => {
+      if (slot.startsWith('SP')) options.push(slot);
+    });
   }
 
-  if (position === 'Bullpen' && rosterSlots.includes('Bullpen')) {
-    return 'Bullpen';
+  if (
+    (position === 'RP' || position === 'Bullpen') &&
+    rosterSlots.includes('Bullpen')
+  ) {
+    options.push('Bullpen');
   }
 
-  return rosterSlots.find((slot) => !slot.includes('SP')) || rosterSlots[0];
+  return [...new Set(options)];
+}
+
+function findOpenRosterSlot(
+  player: Player,
+  rosterSlots: readonly string[],
+  currentRoster: Record<string, Player | null>
+) {
+  const slotOptions = getPlayerSlotOptions(player, rosterSlots);
+
+  const openMatchingSlot = slotOptions.find((slot) => !currentRoster[slot]);
+
+  if (openMatchingSlot) {
+    return openMatchingSlot;
+  }
+
+  const firstOpenSlot = rosterSlots.find((slot) => !currentRoster[slot]);
+
+  return firstOpenSlot || null;
 }
 
 export default function SportGame() {
@@ -73,27 +123,23 @@ export default function SportGame() {
 
   const [mode, setMode] = useState<'casual' | 'ultimate'>('casual');
   const [reSpins, setReSpins] = useState<number>(sport.reSpins);
+  const [finalRecord, setFinalRecord] = useState<string | null>(null);
+
   const [userRoster, setUserRoster] = useState<Record<string, Player | null>>(
-    () =>
-      Object.fromEntries(
-        sport.roster.map((slot) => [slot, null])
-      ) as Record<string, Player | null>
+    () => createEmptyRoster(sport.roster)
   );
 
   const currentReSpins = mode === 'ultimate' ? 0 : reSpins;
   const rosterIsFull = sport.roster.every((slot) => userRoster[slot]);
 
   function resetRoster() {
-    setUserRoster(
-      Object.fromEntries(
-        sport.roster.map((slot) => [slot, null])
-      ) as Record<string, Player | null>
-    );
+    setUserRoster(createEmptyRoster(sport.roster));
   }
 
   function resetGame(nextMode = mode) {
     setSelectedSeason(getRandomSeason(sportKey));
     setReSpins(nextMode === 'ultimate' ? 0 : sport.reSpins);
+    setFinalRecord(null);
     resetRoster();
   }
 
@@ -101,56 +147,72 @@ export default function SportGame() {
     if (currentReSpins <= 0) return;
 
     setSelectedSeason(getRandomSeason(sportKey));
-    setReSpins((current) => current - 1);
+    setReSpins((current) => Math.max(current - 1, 0));
+    setFinalRecord(null);
   }
 
   function reSpinYear() {
     if (currentReSpins <= 0) return;
 
     setSelectedSeason(getRandomSeasonByTeam(sportKey, selectedSeason.team));
-    setReSpins((current) => current - 1);
+    setReSpins((current) => Math.max(current - 1, 0));
+    setFinalRecord(null);
+  }
+
+  function playerAlreadySelected(player: Player) {
+    return Object.values(userRoster).some(
+      (selectedPlayer) => selectedPlayer?.name === player.name
+    );
   }
 
   function selectPlayer(player: Player) {
-    const slot = findRosterSlot(player, sport.roster);
+    if (playerAlreadySelected(player)) {
+      alert(`${player.name} is already on your roster.`);
+      return;
+    }
 
-    setUserRoster((currentRoster) => {
-      if (currentRoster[slot]) {
-        return currentRoster;
-      }
+    const slot = findOpenRosterSlot(player, sport.roster, userRoster);
 
-      return {
-        ...currentRoster,
-        [slot]: player,
-      };
-    });
+    if (!slot) {
+      alert('No open roster slot available.');
+      return;
+    }
+
+    setUserRoster((currentRoster) => ({
+      ...currentRoster,
+      [slot]: player,
+    }));
 
     setSelectedSeason(getRandomSeason(sportKey));
+    setFinalRecord(null);
+  }
+
+  function removePlayer(slot: string) {
+    setUserRoster((currentRoster) => ({
+      ...currentRoster,
+      [slot]: null,
+    }));
+
+    setFinalRecord(null);
   }
 
   function simulateSeason() {
     if (!rosterIsFull) return;
 
-    let maxWins = 0;
-    let minLosses = 0;
-
-    if (sportKey === 'nba') {
-      maxWins = 82;
-    }
+    let games = 82;
 
     if (sportKey === 'nfl') {
-      maxWins = 17;
+      games = 17;
     }
 
     if (sportKey === 'mlb') {
-      maxWins = 162;
+      games = 162;
     }
 
-    const randomLosses = Math.floor(Math.random() * 8);
-    minLosses = randomLosses;
-    const wins = Math.max(maxWins - minLosses, 0);
+    const losses = Math.floor(Math.random() * 8);
+    const wins = games - losses;
 
-    alert(`Final Record: ${wins}-${minLosses}`);
+    setFinalRecord(`${wins}-${losses}`);
   }
 
   return (
@@ -225,21 +287,30 @@ export default function SportGame() {
           <h2>Available Players</h2>
 
           <div className="mode-list">
-            {selectedSeason.players.map((player) => (
-              <button
-                key={`${selectedSeason.id}-${player.name}`}
-                className="card"
-                onClick={() => selectPlayer(player)}
-                style={{
-                  textAlign: 'left',
-                  color: 'white',
-                  cursor: 'pointer',
-                }}
-              >
-                <strong>{player.name}</strong>
-                <p className="small">{player.position}</p>
-              </button>
-            ))}
+            {selectedSeason.players.map((player) => {
+              const alreadySelected = playerAlreadySelected(player);
+
+              return (
+                <button
+                  key={`${selectedSeason.id}-${player.name}`}
+                  className="card"
+                  onClick={() => selectPlayer(player)}
+                  disabled={alreadySelected}
+                  style={{
+                    textAlign: 'left',
+                    color: 'white',
+                    cursor: alreadySelected ? 'not-allowed' : 'pointer',
+                    opacity: alreadySelected ? 0.5 : 1,
+                  }}
+                >
+                  <strong>{player.name}</strong>
+                  <p className="small">{player.position}</p>
+                  {alreadySelected && (
+                    <p className="small">Already selected</p>
+                  )}
+                </button>
+              );
+            })}
           </div>
         </div>
 
@@ -250,11 +321,21 @@ export default function SportGame() {
             {sport.roster.map((slot) => (
               <div key={slot} className="card">
                 <strong>{slot}</strong>
+
                 <p className="small">
                   {userRoster[slot]
                     ? `${userRoster[slot]?.name} — ${userRoster[slot]?.position}`
                     : 'Empty slot'}
                 </p>
+
+                {userRoster[slot] && (
+                  <button
+                    className="btn secondary"
+                    onClick={() => removePlayer(slot)}
+                  >
+                    Remove
+                  </button>
+                )}
               </div>
             ))}
           </div>
@@ -270,9 +351,14 @@ export default function SportGame() {
           </div>
 
           {!rosterIsFull && (
-            <p className="small">
-              Fill every roster slot to simulate the season.
-            </p>
+            <p className="small">Fill every roster slot to simulate.</p>
+          )}
+
+          {finalRecord && (
+            <div className="card">
+              <span className="pill">Final Record</span>
+              <div className="stat">{finalRecord}</div>
+            </div>
           )}
         </div>
       </section>
