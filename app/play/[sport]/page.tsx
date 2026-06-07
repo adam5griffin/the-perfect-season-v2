@@ -229,8 +229,11 @@ export default function SportGame() {
     getRandomSeason(sportKey)
   );
 
-  const colors = getTeamColors(selectedSeason.team);
-  const teamWordmark = getTeamWordmark(selectedSeason.team);
+  const [shuffleSeason, setShuffleSeason] = useState<SeasonTeam | null>(null);
+  const displayedSeason = shuffleSeason || selectedSeason;
+
+  const colors = getTeamColors(displayedSeason.team);
+  const teamWordmark = getTeamWordmark(displayedSeason.team);
 
   const [mode, setMode] = useState<'casual' | 'ultimate'>('casual');
   const [reSpins, setReSpins] = useState<number>(sport.reSpins);
@@ -259,6 +262,7 @@ export default function SportGame() {
     null
   );
   const [isShuffling, setIsShuffling] = useState(false);
+  const [newDrawFlash, setNewDrawFlash] = useState(false);
 
   const currentReSpins = mode === 'ultimate' ? 0 : reSpins;
   const filledSlots = sport.roster.filter((slot) => userRoster[slot]).length;
@@ -293,17 +297,50 @@ export default function SportGame() {
     setSelectedPlayerName(null);
   }
 
-  function drawNextSeason() {
+  function startTeamShuffle(finalSeason: SeasonTeam) {
     setIsShuffling(true);
+    setNewDrawFlash(false);
 
-    setTimeout(() => {
-      setSelectedSeason(getRandomSeason(sportKey));
-      setIsShuffling(false);
-    }, 360);
+    const shuffleList = [
+      getRandomSeason(sportKey),
+      getRandomSeason(sportKey),
+      getRandomSeason(sportKey),
+      getRandomSeason(sportKey),
+      getRandomSeason(sportKey),
+      finalSeason,
+    ];
+
+    let index = 0;
+
+    const interval = window.setInterval(() => {
+      setShuffleSeason(shuffleList[index]);
+      index += 1;
+
+      if (index >= shuffleList.length) {
+        window.clearInterval(interval);
+
+        setTimeout(() => {
+          setSelectedSeason(finalSeason);
+          setShuffleSeason(null);
+          setIsShuffling(false);
+          setNewDrawFlash(true);
+          setSelectedPlayerName(null);
+
+          setTimeout(() => {
+            setNewDrawFlash(false);
+          }, 900);
+        }, 140);
+      }
+    }, 95);
   }
 
   function resetGame(nextMode = mode) {
-    setSelectedSeason(getRandomSeason(sportKey));
+    const nextSeason = getRandomSeason(sportKey);
+
+    setSelectedSeason(nextSeason);
+    setShuffleSeason(null);
+    setIsShuffling(false);
+    setNewDrawFlash(false);
     setReSpins(nextMode === 'ultimate' ? 0 : sport.reSpins);
     clearResults();
     clearDraftAnimations();
@@ -311,29 +348,23 @@ export default function SportGame() {
   }
 
   function reSpinTeam() {
-    if (currentReSpins <= 0) return;
+    if (currentReSpins <= 0 || isShuffling) return;
 
-    setIsShuffling(true);
+    const finalSeason = getRandomSeason(sportKey);
+
     setReSpins((current) => Math.max(current - 1, 0));
     clearResults();
-
-    setTimeout(() => {
-      setSelectedSeason(getRandomSeason(sportKey));
-      setIsShuffling(false);
-    }, 360);
+    startTeamShuffle(finalSeason);
   }
 
   function reSpinYear() {
-    if (currentReSpins <= 0) return;
+    if (currentReSpins <= 0 || isShuffling) return;
 
-    setIsShuffling(true);
+    const finalSeason = getRandomSeasonByTeam(sportKey, selectedSeason.team);
+
     setReSpins((current) => Math.max(current - 1, 0));
     clearResults();
-
-    setTimeout(() => {
-      setSelectedSeason(getRandomSeasonByTeam(sportKey, selectedSeason.team));
-      setIsShuffling(false);
-    }, 360);
+    startTeamShuffle(finalSeason);
   }
 
   function playerAlreadySelected(player: Player) {
@@ -343,6 +374,8 @@ export default function SportGame() {
   }
 
   function selectPlayer(player: Player) {
+    if (isShuffling) return;
+
     if (playerAlreadySelected(player)) {
       alert(`${player.name} is already on your roster.`);
       return;
@@ -366,7 +399,9 @@ export default function SportGame() {
       setLastDraftedPlayer(player);
       setLastDraftedSlot(slot);
       clearResults();
-      drawNextSeason();
+
+      const finalSeason = getRandomSeason(sportKey);
+      startTeamShuffle(finalSeason);
     }, 180);
   }
 
@@ -450,6 +485,7 @@ Play now: https://the-perfect-season-v2.vercel.app`;
               setMode('casual');
               resetGame('casual');
             }}
+            disabled={isShuffling}
           >
             Casual Mode
           </button>
@@ -460,6 +496,7 @@ Play now: https://the-perfect-season-v2.vercel.app`;
               setMode('ultimate');
               resetGame('ultimate');
             }}
+            disabled={isShuffling}
           >
             Ultimate Mode
           </button>
@@ -468,21 +505,28 @@ Play now: https://the-perfect-season-v2.vercel.app`;
 
       <section className="game-shell">
         <div
-          className={`card draw-box ${isShuffling ? 'draw-box-shuffling' : ''}`}
+          className={`card draw-box draft-machine ${
+            isShuffling ? 'draft-machine-spinning' : ''
+          }`}
           style={{
             background: `linear-gradient(135deg, ${colors.primary}, ${colors.secondary})`,
             color: colors.text,
             border: `1px solid ${colors.secondary}`,
           }}
         >
-          <p className="eyebrow">
-            {mode === 'ultimate' ? 'Ultimate Mode' : 'Casual Mode'}
-          </p>
+          <div className="draft-machine-top">
+            <p className="eyebrow">
+              {mode === 'ultimate' ? 'Ultimate Mode' : 'Casual Mode'}
+            </p>
+
+            {newDrawFlash && <span className="new-draw-badge">New Draw</span>}
+            {isShuffling && <span className="shuffle-badge">Shuffling</span>}
+          </div>
 
           <div
             className={`draw team-wordmark ${teamWordmark.style} ${
               teamWordmark.shape || 'normal'
-            } ${isShuffling ? 'wordmark-shuffling' : ''}`}
+            } ${isShuffling ? 'wordmark-slot-spin' : ''}`}
             style={
               {
                 '--team-wordmark-main': colors.secondary,
@@ -491,11 +535,11 @@ Play now: https://the-perfect-season-v2.vercel.app`;
               } as React.CSSProperties
             }
           >
-            <span className="team-wordmark-city">{selectedSeason.year}</span>
-            <span className="team-wordmark-name">{selectedSeason.team}</span>
+            <span className="team-wordmark-city">{displayedSeason.year}</span>
+            <span className="team-wordmark-name">{displayedSeason.team}</span>
           </div>
 
-          {selectedSeason.isFeatured && (
+          {selectedSeason.isFeatured && !isShuffling && (
             <span className="pill">
               {selectedSeason.rosterBranch === 'championship'
                 ? 'Championship Roster'
@@ -519,15 +563,27 @@ Play now: https://the-perfect-season-v2.vercel.app`;
           </p>
 
           <div className="buttons">
-            <button className="btn secondary" onClick={reSpinTeam}>
+            <button
+              className="btn secondary"
+              onClick={reSpinTeam}
+              disabled={isShuffling || currentReSpins <= 0}
+            >
               Re-spin Team
             </button>
 
-            <button className="btn secondary" onClick={reSpinYear}>
+            <button
+              className="btn secondary"
+              onClick={reSpinYear}
+              disabled={isShuffling || currentReSpins <= 0}
+            >
               Re-spin Year
             </button>
 
-            <button className="btn" onClick={() => resetGame(mode)}>
+            <button
+              className="btn"
+              onClick={() => resetGame(mode)}
+              disabled={isShuffling}
+            >
               New Game
             </button>
           </div>
