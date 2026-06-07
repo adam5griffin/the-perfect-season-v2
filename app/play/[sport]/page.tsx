@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useParams } from 'next/navigation';
 import Nav from '../../../components/Nav';
 import {
   sports,
@@ -10,15 +11,18 @@ import {
   SeasonTeam,
 } from '../../../lib/gameData';
 
-type SportGameProps = {
-  params: {
-    sport: SportKey;
-  };
-};
+function isValidSport(value: string): value is SportKey {
+  return value === 'nba' || value === 'nfl' || value === 'mlb';
+}
 
-export default function SportGame({ params }: SportGameProps) {
-  const sportKey = params.sport;
-  const sport = sports[sportKey] || sports.nba;
+export default function SportGame() {
+  const params = useParams();
+  const rawSport = params.sport;
+
+  const sportKey: SportKey =
+    typeof rawSport === 'string' && isValidSport(rawSport) ? rawSport : 'nba';
+
+  const sport = sports[sportKey];
 
   const [selectedSeason, setSelectedSeason] = useState<SeasonTeam>(() =>
     getRandomSeason(sportKey)
@@ -38,14 +42,14 @@ export default function SportGame({ params }: SportGameProps) {
     if (currentReSpins <= 0) return;
 
     setSelectedSeason(getRandomSeason(sportKey));
-    setReSpins(reSpins - 1);
+    setReSpins((current) => current - 1);
   }
 
   function reSpinYear() {
     if (currentReSpins <= 0) return;
 
     setSelectedSeason(getRandomSeasonByTeam(sportKey, selectedSeason.team));
-    setReSpins(reSpins - 1);
+    setReSpins((current) => current - 1);
   }
 
   return (
