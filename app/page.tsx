@@ -6,8 +6,8 @@ export default function Home() {
     <main className="page">
       <Nav />
 
-      <section className="hero">
-        <div>
+      <section className="hero hero-clean">
+        <div className="hero-text">
           <div className="eyebrow">NBA • NFL • MLB</div>
 
           <h1>Can you build The Perfect Season?</h1>
@@ -17,7 +17,7 @@ export default function Home() {
             and simulate your way toward 82-0, 17-0, or 162-0.
           </p>
 
-          <div className="buttons">
+          <div className="buttons hero-buttons">
             <Link className="btn" href="/play">
               Play Free
             </Link>
@@ -28,12 +28,14 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="card hero-art-card">
-          <img
-            src="/6CABEE02-7EE0-4F4C-A914-A01E08893205.png"
-            alt="Perfect Season sports artwork"
-            className="hero-art"
-          />
+        <div className="hero-art-wrap">
+          <div className="hero-art-shell">
+            <img
+              src="/6CABEE02-7EE0-4F4C-A914-A01E08893205.png"
+              alt="Perfect Season sports artwork"
+              className="hero-art"
+            />
+          </div>
         </div>
       </section>
 
