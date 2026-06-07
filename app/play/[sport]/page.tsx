@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useParams } from 'next/navigation';
 import Nav from '../../../components/Nav';
+import { getTeamColors } from '../../../lib/teamColors';
 import {
   sports,
   SportKey,
@@ -209,6 +210,7 @@ function calculateSeasonResult(
       : Math.round(ratingGap / 2);
 
   const randomness = Math.floor(Math.random() * 4);
+
   const losses = Math.min(
     games,
     Math.max(0, baseLosses + balancePenalty + randomness)
@@ -236,6 +238,8 @@ export default function SportGame() {
   const [selectedSeason, setSelectedSeason] = useState<SeasonTeam>(() =>
     getRandomSeason(sportKey)
   );
+
+  const colors = getTeamColors(selectedSeason.team);
 
   const [mode, setMode] = useState<'casual' | 'ultimate'>('casual');
   const [reSpins, setReSpins] = useState<number>(sport.reSpins);
@@ -423,14 +427,21 @@ Play now: https://the-perfect-season-v2.vercel.app`;
       </section>
 
       <section className="game-shell">
-        <div className="card draw-box">
+        <div
+          className="card draw-box"
+          style={{
+            background: `linear-gradient(135deg, ${colors.primary}, ${colors.secondary})`,
+            color: colors.text,
+            border: `1px solid ${colors.secondary}`,
+          }}
+        >
           <p className="eyebrow">
             {mode === 'ultimate' ? 'Ultimate Mode' : 'Casual Mode'}
           </p>
 
           <div className="draw">{selectedSeason.displayName}</div>
 
-          <p className="muted">
+          <p className="muted" style={{ color: colors.text }}>
             Pick {filledSlots + 1} of {totalSlots}. Choose one player from the{' '}
             {selectedSeason.displayName} roster.
           </p>
@@ -449,7 +460,9 @@ Play now: https://the-perfect-season-v2.vercel.app`;
             </button>
           </div>
 
-          <p className="small">Re-spins remaining: {currentReSpins}</p>
+          <p className="small" style={{ color: colors.text }}>
+            Re-spins remaining: {currentReSpins}
+          </p>
         </div>
 
         <div className="card">
@@ -473,9 +486,11 @@ Play now: https://the-perfect-season-v2.vercel.app`;
                   }}
                 >
                   <strong>{player.name}</strong>
+
                   <p className="small">
                     {player.position} • Rating {player.rating}
                   </p>
+
                   {player.stats && (
                     <p className="small">
                       {Object.entries(player.stats)
@@ -483,9 +498,8 @@ Play now: https://the-perfect-season-v2.vercel.app`;
                         .join(' • ')}
                     </p>
                   )}
-                  {alreadySelected && (
-                    <p className="small">Already selected</p>
-                  )}
+
+                  {alreadySelected && <p className="small">Already selected</p>}
                 </button>
               );
             })}
@@ -544,21 +558,38 @@ Play now: https://the-perfect-season-v2.vercel.app`;
           )}
 
           {finalRecord && (
-            <div className="card">
+            <div
+              className="card"
+              style={{
+                background: `linear-gradient(135deg, ${colors.primary}, ${colors.secondary})`,
+                color: colors.text,
+                border: `1px solid ${colors.secondary}`,
+              }}
+            >
               <span className="pill">Share Card</span>
+
               <h2>THE PERFECT SEASON</h2>
 
-              <p className="muted">
+              <p className="muted" style={{ color: colors.text }}>
                 {sport.name}{' '}
                 {mode === 'ultimate' ? 'Ultimate Mode' : 'Casual Mode'}
               </p>
 
               <div className="stat">{finalRecord}</div>
 
-              <p className="small">Overall Rating: {finalRating}</p>
-              <p className="small">Offense Rating: {finalOffenseRating}</p>
-              <p className="small">Defense Rating: {finalDefenseRating}</p>
-              <p className="small">
+              <p className="small" style={{ color: colors.text }}>
+                Overall Rating: {finalRating}
+              </p>
+
+              <p className="small" style={{ color: colors.text }}>
+                Offense Rating: {finalOffenseRating}
+              </p>
+
+              <p className="small" style={{ color: colors.text }}>
+                Defense Rating: {finalDefenseRating}
+              </p>
+
+              <p className="small" style={{ color: colors.text }}>
                 Perfect Season Chance: {perfectSeasonChance}%
               </p>
 
