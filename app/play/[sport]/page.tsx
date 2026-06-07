@@ -10,11 +10,18 @@ import {
   SeasonTeam,
 } from '../../../lib/gameData';
 
-export default function SportGame({ params }: { params: { sport: SportKey } }) {
-  const sport = sports[params.sport] || sports.nba;
+type SportGameProps = {
+  params: {
+    sport: SportKey;
+  };
+};
+
+export default function SportGame({ params }: SportGameProps) {
+  const sportKey = params.sport;
+  const sport = sports[sportKey] || sports.nba;
 
   const [selectedSeason, setSelectedSeason] = useState<SeasonTeam>(() =>
-    getRandomSeason(params.sport)
+    getRandomSeason(sportKey)
   );
 
   const [mode, setMode] = useState<'casual' | 'ultimate'>('casual');
@@ -23,24 +30,21 @@ export default function SportGame({ params }: { params: { sport: SportKey } }) {
   const currentReSpins = mode === 'ultimate' ? 0 : reSpins;
 
   function resetGame(nextMode = mode) {
-    setSelectedSeason(getRandomSeason(params.sport));
+    setSelectedSeason(getRandomSeason(sportKey));
     setReSpins(nextMode === 'ultimate' ? 0 : sport.reSpins);
   }
 
   function reSpinTeam() {
     if (currentReSpins <= 0) return;
 
-    setSelectedSeason(getRandomSeason(params.sport));
+    setSelectedSeason(getRandomSeason(sportKey));
     setReSpins(reSpins - 1);
   }
 
   function reSpinYear() {
     if (currentReSpins <= 0) return;
 
-    setSelectedSeason(
-      getRandomSeasonByTeam(params.sport, selectedSeason.team)
-    );
-
+    setSelectedSeason(getRandomSeasonByTeam(sportKey, selectedSeason.team));
     setReSpins(reSpins - 1);
   }
 
@@ -50,13 +54,14 @@ export default function SportGame({ params }: { params: { sport: SportKey } }) {
 
       <section className="section">
         <span className="pill">{sport.name} Mode</span>
+
         <h1>
           {sport.name} {sport.perfectRecord}
         </h1>
 
         <p className="subtitle">
-          Draw a specific team season, choose the best player from that exact roster,
-          and chase the perfect regular season.
+          Draw a specific team season, choose the best player from that exact
+          roster, and chase the perfect regular season.
         </p>
 
         <div className="buttons">
@@ -116,7 +121,7 @@ export default function SportGame({ params }: { params: { sport: SportKey } }) {
 
           <div className="mode-list">
             {selectedSeason.players.map((player) => (
-              <div key={player.name} className="card">
+              <div key={`${selectedSeason.id}-${player.name}`} className="card">
                 <strong>{player.name}</strong>
                 <p className="small">{player.position}</p>
               </div>
