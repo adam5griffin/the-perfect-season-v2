@@ -2297,3 +2297,285 @@ button.card {
     grid-template-columns: repeat(2, 1fr);
   }
 }
+/* One-screen desktop game layout */
+
+@media (min-width: 1200px) {
+  .page {
+    padding: 22px 28px;
+  }
+
+  .section {
+    max-width: 100%;
+    margin-bottom: 14px;
+  }
+
+  .section h1 {
+    font-size: 42px;
+    margin-bottom: 10px;
+    letter-spacing: -1.5px;
+  }
+
+  .section .subtitle {
+    font-size: 14px;
+    max-width: 720px;
+    margin-bottom: 8px;
+  }
+
+  .section .buttons {
+    margin-top: 8px;
+  }
+
+  .nav {
+    margin-bottom: 22px;
+  }
+
+  .game-shell {
+    display: grid;
+    grid-template-columns: 280px 320px minmax(420px, 1fr) 330px;
+    gap: 14px;
+    align-items: stretch;
+    margin-top: 12px;
+  }
+
+  .draw-box {
+    position: static;
+    min-height: auto;
+    height: calc(100vh - 190px);
+    padding: 16px;
+    border-radius: 22px;
+  }
+
+  .available-panel,
+  .roster-panel,
+  .surface-card {
+    height: calc(100vh - 190px);
+    overflow: hidden;
+    border-radius: 22px;
+    padding: 16px;
+  }
+
+  .available-panel .mode-list,
+  .roster-panel .mode-list {
+    max-height: calc(100vh - 340px);
+    overflow-y: auto;
+    padding-right: 6px;
+  }
+
+  .surface-card {
+    grid-column: auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .surface-header {
+    margin-bottom: 10px;
+  }
+
+  .surface-header h2 {
+    font-size: 19px;
+  }
+
+  .surface-header .small {
+    display: none;
+  }
+
+  .sport-surface {
+    flex: 1;
+    min-height: 0;
+    height: 100%;
+    border-radius: 20px;
+  }
+
+  .team-wordmark {
+    font-size: clamp(22px, 2.1vw, 32px);
+    line-height: 0.95;
+  }
+
+  .team-wordmark-city {
+    font-size: 10px;
+    letter-spacing: 2.5px;
+    margin-bottom: 5px;
+  }
+
+  .draw {
+    margin: 10px 0;
+  }
+
+  .draw-box .muted {
+    font-size: 12px;
+    line-height: 1.35;
+    margin: 8px 0;
+  }
+
+  .draw-box .small {
+    font-size: 10.5px;
+    margin: 5px 0;
+  }
+
+  .draft-toast {
+    padding: 9px 10px;
+    margin: 8px 0;
+    border-radius: 14px;
+  }
+
+  .draft-toast strong {
+    font-size: 13px;
+  }
+
+  .game-shell h2 {
+    font-size: 19px;
+    margin-bottom: 10px;
+  }
+
+  .mode-list {
+    gap: 7px;
+  }
+
+  .mode-list .card,
+  .mode-list button.card {
+    padding: 9px;
+    border-radius: 12px;
+  }
+
+  .game-shell strong {
+    font-size: 13px;
+  }
+
+  .game-shell .small {
+    font-size: 10.5px;
+    line-height: 1.25;
+  }
+
+  .game-shell .buttons {
+    gap: 6px;
+    margin-top: 9px;
+  }
+
+  .game-shell .btn {
+    padding: 8px 10px;
+    min-height: 32px;
+    font-size: 10px;
+  }
+
+  .rating-strip {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 5px;
+    margin-bottom: 9px;
+  }
+
+  .rating-strip div {
+    padding: 7px 5px;
+    border-radius: 10px;
+  }
+
+  .rating-strip span {
+    font-size: 7px;
+  }
+
+  .rating-strip strong {
+    font-size: 14px;
+  }
+
+  .surface-slot {
+    width: 112px;
+    min-height: 58px;
+    padding: 7px;
+    border-radius: 12px;
+  }
+
+  .surface-slot-label {
+    font-size: 8px;
+    margin-bottom: 3px;
+  }
+
+  .surface-slot strong {
+    font-size: 10px;
+    line-height: 1.05;
+  }
+
+  .surface-rating,
+  .surface-empty {
+    font-size: 8px;
+    margin-top: 3px;
+  }
+
+  /* NFL one-screen positioning */
+
+  .nfl-qb {
+    left: 43%;
+    top: 48%;
+  }
+
+  .nfl-rb {
+    left: 30%;
+    top: 60%;
+  }
+
+  .nfl-wr1 {
+    left: 6%;
+    top: 18%;
+  }
+
+  .nfl-wr2 {
+    right: 6%;
+    top: 18%;
+  }
+
+  .nfl-te {
+    right: 26%;
+    top: 35%;
+  }
+
+  .nfl-flex {
+    left: 8%;
+    bottom: 10%;
+  }
+
+  .nfl-offensive-line {
+    left: 41%;
+    top: 30%;
+  }
+
+  .nfl-team-defense {
+    right: 8%;
+    bottom: 10%;
+  }
+
+  /* NBA still stays compact */
+
+  .nba-pg {
+    left: 10%;
+    top: 42%;
+  }
+
+  .nba-sg {
+    left: 28%;
+    top: 18%;
+  }
+
+  .nba-sf {
+    right: 28%;
+    top: 18%;
+  }
+
+  .nba-pf {
+    right: 10%;
+    top: 42%;
+  }
+
+  .nba-c {
+    left: 50%;
+    top: 49%;
+  }
+
+  .nba-6th-man {
+    left: 50%;
+    bottom: 7%;
+  }
+
+  /* MLB gets tighter but may still need its own tuning later */
+
+  .mlb-diamond {
+    min-height: 0;
+  }
+}
