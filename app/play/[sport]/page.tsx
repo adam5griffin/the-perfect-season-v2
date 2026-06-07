@@ -26,29 +26,19 @@ function createEmptyRoster(
 
 function getPlayerSlotOptions(player: Player, rosterSlots: readonly string[]) {
   const position = player.position;
-
   const options: string[] = [];
 
   if (rosterSlots.includes(position)) {
     options.push(position);
   }
 
-  // NBA fallback logic
-  if (position === 'PG' && rosterSlots.includes('PG')) options.push('PG');
-  if (position === 'SG' && rosterSlots.includes('SG')) options.push('SG');
-  if (position === 'SF' && rosterSlots.includes('SF')) options.push('SF');
-  if (position === 'PF' && rosterSlots.includes('PF')) options.push('PF');
-  if (position === 'C' && rosterSlots.includes('C')) options.push('C');
-
-  if (
-    ['PG', 'SG', 'SF', 'PF', 'C'].includes(position) &&
-    rosterSlots.includes('6th Man')
-  ) {
-    options.push('6th Man');
+  if (['PG', 'SG', 'SF', 'PF', 'C'].includes(position)) {
+    if (rosterSlots.includes(position)) options.push(position);
+    if (rosterSlots.includes('6th Man')) options.push('6th Man');
   }
 
-  // NFL fallback logic
   if (position === 'QB' && rosterSlots.includes('QB')) options.push('QB');
+
   if (position === 'RB') {
     if (rosterSlots.includes('RB')) options.push('RB');
     if (rosterSlots.includes('FLEX')) options.push('FLEX');
@@ -73,7 +63,6 @@ function getPlayerSlotOptions(player: Player, rosterSlots: readonly string[]) {
     options.push('Team Defense');
   }
 
-  // MLB fallback logic
   if (position === 'SP') {
     rosterSlots.forEach((slot) => {
       if (slot.startsWith('SP')) options.push(slot);
@@ -96,7 +85,6 @@ function findOpenRosterSlot(
   currentRoster: Record<string, Player | null>
 ) {
   const slotOptions = getPlayerSlotOptions(player, rosterSlots);
-
   const openMatchingSlot = slotOptions.find((slot) => !currentRoster[slot]);
 
   if (openMatchingSlot) {
@@ -104,8 +92,40 @@ function findOpenRosterSlot(
   }
 
   const firstOpenSlot = rosterSlots.find((slot) => !currentRoster[slot]);
-
   return firstOpenSlot || null;
+}
+
+function calculateRosterRating(roster: Record<string, Player | null>) {
+  const players = Object.values(roster).filter(Boolean) as Player[];
+
+  if (players.length === 0) {
+    return 0;
+  }
+
+  const totalRating = players.reduce((sum, player) => sum + player.rating, 0);
+  return Math.round(totalRating / players.length);
+}
+
+function calculateSeasonResult(sportKey: SportKey, rosterRating: number) {
+  const games = sportKey === 'nba' ? 82 : sportKey === 'nfl' ? 17 : 162;
+
+  const ratingGap = Math.max(0, 100 - rosterRating);
+  const baseLosses =
+    sportKey === 'nba'
+      ? Math.round(ratingGap / 4)
+      : sportKey === 'nfl'
+      ? Math.round(ratingGap / 12)
+      : Math.round(ratingGap / 2);
+
+  const randomness = Math.floor(Math.random() * 4);
+  const losses = Math.min(games, Math.max(0, baseLosses + randomness));
+  const wins = games - losses;
+
+  return {
+    wins,
+    losses,
+    record: `${wins}-${losses}`,
+  };
 }
 
 export default function SportGame() {
@@ -124,13 +144,17 @@ export default function SportGame() {
   const [mode, setMode] = useState<'casual' | 'ultimate'>('casual');
   const [reSpins, setReSpins] = useState<number>(sport.reSpins);
   const [finalRecord, setFinalRecord] = useState<string | null>(null);
+  const [finalRating, setFinalRating] = useState<number | null>(null);
 
   const [userRoster, setUserRoster] = useState<Record<string, Player | null>>(
     () => createEmptyRoster(sport.roster)
   );
 
   const currentReSpins = mode === 'ultimate' ? 0 : reSpins;
-  const rosterIsFull = sport.roster.every((slot) => userRoster[slot]);
+  const filledSlots = sport.roster.filter((slot) => userRoster[slot]).length;
+  const totalSlots = sport.roster.length;
+  const rosterIsFull = filledSlots === totalSlots;
+  const currentRating = calculateRosterRating(userRoster);
 
   function resetRoster() {
     setUserRoster(createEmptyRoster(sport.roster));
@@ -140,6 +164,7 @@ export default function SportGame() {
     setSelectedSeason(getRandomSeason(sportKey));
     setReSpins(nextMode === 'ultimate' ? 0 : sport.reSpins);
     setFinalRecord(null);
+    setFinalRating(null);
     resetRoster();
   }
 
@@ -149,6 +174,7 @@ export default function SportGame() {
     setSelectedSeason(getRandomSeason(sportKey));
     setReSpins((current) => Math.max(current - 1, 0));
     setFinalRecord(null);
+    setFinalRating(null);
   }
 
   function reSpinYear() {
@@ -157,6 +183,7 @@ export default function SportGame() {
     setSelectedSeason(getRandomSeasonByTeam(sportKey, selectedSeason.team));
     setReSpins((current) => Math.max(current - 1, 0));
     setFinalRecord(null);
+    setFinalRating(null);
   }
 
   function playerAlreadySelected(player: Player) {
@@ -185,6 +212,7 @@ export default function SportGame() {
 
     setSelectedSeason(getRandomSeason(sportKey));
     setFinalRecord(null);
+    setFinalRating(null);
   }
 
   function removePlayer(slot: string) {
@@ -194,25 +222,35 @@ export default function SportGame() {
     }));
 
     setFinalRecord(null);
+    setFinalRating(null);
   }
 
   function simulateSeason() {
     if (!rosterIsFull) return;
 
-    let games = 82;
+    const rosterRating = calculateRosterRating(userRoster);
+    const result = calculateSeasonResult(sportKey, rosterRating);
 
-    if (sportKey === 'nfl') {
-      games = 17;
-    }
+    setFinalRecord(result.record);
+    setFinalRating(rosterRating);
+  }
 
-    if (sportKey === 'mlb') {
-      games = 162;
-    }
+  function copyShareText() {
+    const rosterText = sport.roster
+      .map((slot) => `${slot}: ${userRoster[slot]?.name || 'Empty'}`)
+      .join('\n');
 
-    const losses = Math.floor(Math.random() * 8);
-    const wins = games - losses;
+    const shareText = `THE PERFECT SEASON
+${sport.name} ${mode === 'ultimate' ? 'Ultimate Mode' : 'Casual Mode'}
+Final Record: ${finalRecord}
+Team Rating: ${finalRating}
 
-    setFinalRecord(`${wins}-${losses}`);
+${rosterText}
+
+Play now: https://the-perfect-season-v2.vercel.app`;
+
+    navigator.clipboard.writeText(shareText);
+    alert('Share card copied!');
   }
 
   return (
@@ -304,7 +342,16 @@ export default function SportGame() {
                   }}
                 >
                   <strong>{player.name}</strong>
-                  <p className="small">{player.position}</p>
+                  <p className="small">
+                    {player.position} • Rating {player.rating}
+                  </p>
+                  {player.stats && (
+                    <p className="small">
+                      {Object.entries(player.stats)
+                        .map(([key, value]) => `${key.toUpperCase()}: ${value}`)
+                        .join(' • ')}
+                    </p>
+                  )}
                   {alreadySelected && (
                     <p className="small">Already selected</p>
                   )}
@@ -317,6 +364,12 @@ export default function SportGame() {
         <div className="card">
           <h2>Your Roster</h2>
 
+          <p className="small">
+            Roster: {filledSlots} / {totalSlots} filled
+          </p>
+
+          <p className="small">Current Team Rating: {currentRating}</p>
+
           <div className="mode-list">
             {sport.roster.map((slot) => (
               <div key={slot} className="card">
@@ -324,7 +377,7 @@ export default function SportGame() {
 
                 <p className="small">
                   {userRoster[slot]
-                    ? `${userRoster[slot]?.name} — ${userRoster[slot]?.position}`
+                    ? `${userRoster[slot]?.name} — ${userRoster[slot]?.position} — Rating ${userRoster[slot]?.rating}`
                     : 'Empty slot'}
                 </p>
 
@@ -356,8 +409,26 @@ export default function SportGame() {
 
           {finalRecord && (
             <div className="card">
-              <span className="pill">Final Record</span>
+              <span className="pill">Share Card</span>
+              <h2>THE PERFECT SEASON</h2>
+              <p className="muted">
+                {sport.name} {mode === 'ultimate' ? 'Ultimate Mode' : 'Casual Mode'}
+              </p>
               <div className="stat">{finalRecord}</div>
+              <p className="small">Final Team Rating: {finalRating}</p>
+
+              <div className="mode-list">
+                {sport.roster.map((slot) => (
+                  <div key={`share-${slot}`} className="card">
+                    <strong>{slot}</strong>
+                    <p className="small">{userRoster[slot]?.name}</p>
+                  </div>
+                ))}
+              </div>
+
+              <button className="btn" onClick={copyShareText}>
+                Copy Share Card
+              </button>
             </div>
           )}
         </div>
