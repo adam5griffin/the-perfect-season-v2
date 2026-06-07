@@ -1693,3 +1693,224 @@ button.card {
     left: auto !important;
   }
 }
+/* Smooth player selection animations */
+
+.draw-box {
+  transition:
+    transform 0.28s ease,
+    box-shadow 0.28s ease,
+    filter 0.28s ease;
+}
+
+.draw-box-shuffling {
+  animation: drawShuffle 0.36s ease;
+  filter: saturate(1.25) brightness(1.08);
+}
+
+.wordmark-shuffling {
+  animation: wordmarkShuffle 0.36s ease;
+}
+
+.player-option {
+  position: relative;
+  overflow: hidden;
+  transition:
+    transform 0.18s ease,
+    background 0.18s ease,
+    border-color 0.18s ease,
+    opacity 0.18s ease;
+}
+
+.player-option::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(245, 197, 66, 0.26),
+    transparent
+  );
+  transform: translateX(-120%);
+  transition: transform 0.45s ease;
+}
+
+.player-option:hover::after {
+  transform: translateX(120%);
+}
+
+.player-option:hover {
+  transform: translateY(-3px) scale(1.01);
+  border-color: rgba(245, 197, 66, 0.55);
+}
+
+.player-option-selected {
+  animation: playerSelected 0.34s ease forwards;
+  border-color: rgba(245, 197, 66, 0.95) !important;
+  background:
+    linear-gradient(180deg, rgba(245, 197, 66, 0.24), rgba(255, 255, 255, 0.08)) !important;
+}
+
+.draft-toast {
+  margin: 12px 0;
+  padding: 12px 14px;
+  border-radius: 18px;
+  background: rgba(0, 0, 0, 0.32);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  animation: toastPop 0.35s ease;
+  backdrop-filter: blur(12px);
+}
+
+.draft-toast span {
+  display: block;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 1.1px;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+.draft-toast strong {
+  display: block;
+  font-size: 15px;
+  margin-top: 3px;
+}
+
+.draft-toast small {
+  display: inline-flex;
+  margin-top: 6px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: rgba(245, 197, 66, 0.25);
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.roster-slot-card {
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+
+.roster-slot-new {
+  animation: rosterSlotGlow 0.75s ease;
+  border-color: rgba(245, 197, 66, 0.95) !important;
+}
+
+.rating-strip {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.rating-strip div {
+  padding: 12px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.075);
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  text-align: center;
+}
+
+.rating-strip span {
+  display: block;
+  color: #aeb8c8;
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+}
+
+.rating-strip strong {
+  display: block;
+  margin-top: 5px;
+  color: #f5c542;
+  font-size: 20px;
+}
+
+@keyframes drawShuffle {
+  0% {
+    transform: translateY(0) scale(1);
+  }
+
+  35% {
+    transform: translateY(-6px) scale(1.015);
+  }
+
+  70% {
+    transform: translateY(3px) scale(0.995);
+  }
+
+  100% {
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes wordmarkShuffle {
+  0% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  45% {
+    opacity: 0.25;
+    transform: translateX(-12px) skewX(-8deg);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes playerSelected {
+  0% {
+    transform: scale(1);
+  }
+
+  45% {
+    transform: scale(1.04);
+  }
+
+  100% {
+    transform: scale(0.98);
+    opacity: 0.65;
+  }
+}
+
+@keyframes toastPop {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes rosterSlotGlow {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 rgba(245, 197, 66, 0);
+  }
+
+  40% {
+    transform: scale(1.025);
+    box-shadow: 0 0 35px rgba(245, 197, 66, 0.4);
+  }
+
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 rgba(245, 197, 66, 0);
+  }
+}
+
+@media (max-width: 768px) {
+  .rating-strip {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
