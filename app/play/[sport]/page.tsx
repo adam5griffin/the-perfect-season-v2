@@ -7,18 +7,11 @@ import { getTeamColors } from '../../../lib/teamColors';
 import {
   sports,
   SportKey,
-  RosterBranch,
   getRandomSeason,
   getRandomSeasonByTeam,
-  getRandomFeaturedSeason,
-  getRandomFeaturedSeasonByTeam,
-  getRandomFeaturedSeasonByBranch,
-  getRandomFeaturedSeasonByTeamAndBranch,
   SeasonTeam,
   Player,
 } from '../../../lib/gameData';
-
-type DraftPool = 'all' | 'featured' | RosterBranch;
 
 function isValidSport(value: string): value is SportKey {
   return value === 'nba' || value === 'nfl' || value === 'mlb';
@@ -231,13 +224,6 @@ function calculateSeasonResult(
   };
 }
 
-function getDraftPoolLabel(draftPool: DraftPool) {
-  if (draftPool === 'all') return 'All Teams';
-  if (draftPool === 'featured') return 'Featured Teams';
-  if (draftPool === 'championship') return 'Championship Rosters';
-  return 'Legendary Rosters';
-}
-
 export default function SportGame() {
   const params = useParams();
   const rawSport = params.sport;
@@ -246,32 +232,6 @@ export default function SportGame() {
     typeof rawSport === 'string' && isValidSport(rawSport) ? rawSport : 'nba';
 
   const sport = sports[sportKey];
-
-  const [draftPool, setDraftPool] = useState<DraftPool>('all');
-
-  function getNextRandomSeason(pool = draftPool) {
-    if (pool === 'featured') {
-      return getRandomFeaturedSeason(sportKey);
-    }
-
-    if (pool === 'championship' || pool === 'legendary') {
-      return getRandomFeaturedSeasonByBranch(sportKey, pool);
-    }
-
-    return getRandomSeason(sportKey);
-  }
-
-  function getNextRandomSeasonByTeam(team: string, pool = draftPool) {
-    if (pool === 'featured') {
-      return getRandomFeaturedSeasonByTeam(sportKey, team);
-    }
-
-    if (pool === 'championship' || pool === 'legendary') {
-      return getRandomFeaturedSeasonByTeamAndBranch(sportKey, team, pool);
-    }
-
-    return getRandomSeasonByTeam(sportKey, team);
-  }
 
   const [selectedSeason, setSelectedSeason] = useState<SeasonTeam>(() =>
     getRandomSeason(sportKey)
@@ -325,7 +285,7 @@ export default function SportGame() {
   }
 
   function resetGame(nextMode = mode) {
-    setSelectedSeason(getNextRandomSeason());
+    setSelectedSeason(getRandomSeason(sportKey));
     setReSpins(nextMode === 'ultimate' ? 0 : sport.reSpins);
     clearResults();
     resetRoster();
@@ -334,7 +294,7 @@ export default function SportGame() {
   function reSpinTeam() {
     if (currentReSpins <= 0) return;
 
-    setSelectedSeason(getNextRandomSeason());
+    setSelectedSeason(getRandomSeason(sportKey));
     setReSpins((current) => Math.max(current - 1, 0));
     clearResults();
   }
@@ -342,17 +302,9 @@ export default function SportGame() {
   function reSpinYear() {
     if (currentReSpins <= 0) return;
 
-    setSelectedSeason(getNextRandomSeasonByTeam(selectedSeason.team));
+    setSelectedSeason(getRandomSeasonByTeam(sportKey, selectedSeason.team));
     setReSpins((current) => Math.max(current - 1, 0));
     clearResults();
-  }
-
-  function switchDraftPool(nextPool: DraftPool) {
-    setDraftPool(nextPool);
-    setSelectedSeason(getNextRandomSeason(nextPool));
-    setReSpins(mode === 'ultimate' ? 0 : sport.reSpins);
-    clearResults();
-    resetRoster();
   }
 
   function playerAlreadySelected(player: Player) {
@@ -379,7 +331,7 @@ export default function SportGame() {
       [slot]: player,
     }));
 
-    setSelectedSeason(getNextRandomSeason());
+    setSelectedSeason(getRandomSeason(sportKey));
     clearResults();
   }
 
@@ -420,7 +372,7 @@ export default function SportGame() {
 
     const shareText = `THE PERFECT SEASON
 ${sport.name} ${mode === 'ultimate' ? 'Ultimate Mode' : 'Casual Mode'}
-Draft Pool: ${getDraftPoolLabel(draftPool)}
+Draft Pool: All Teams
 Final Record: ${finalRecord}
 Overall Rating: ${finalRating}
 Offense Rating: ${finalOffenseRating}
@@ -447,8 +399,8 @@ Play now: https://the-perfect-season-v2.vercel.app`;
         </h1>
 
         <p className="subtitle">
-          Draw a specific team season, choose one player from that exact roster,
-          and build your perfect team.
+          Draw from the full team-season pool, choose one player from each
+          roster, and build your perfect team.
         </p>
 
         <div className="buttons">
@@ -470,36 +422,6 @@ Play now: https://the-perfect-season-v2.vercel.app`;
             }}
           >
             Ultimate Mode
-          </button>
-        </div>
-
-        <div className="buttons">
-          <button
-            className={draftPool === 'all' ? 'btn' : 'btn secondary'}
-            onClick={() => switchDraftPool('all')}
-          >
-            All Teams
-          </button>
-
-          <button
-            className={draftPool === 'featured' ? 'btn' : 'btn secondary'}
-            onClick={() => switchDraftPool('featured')}
-          >
-            Featured Teams
-          </button>
-
-          <button
-            className={draftPool === 'championship' ? 'btn' : 'btn secondary'}
-            onClick={() => switchDraftPool('championship')}
-          >
-            Championship Rosters
-          </button>
-
-          <button
-            className={draftPool === 'legendary' ? 'btn' : 'btn secondary'}
-            onClick={() => switchDraftPool('legendary')}
-          >
-            Legendary Rosters
           </button>
         </div>
       </section>
@@ -549,7 +471,7 @@ Play now: https://the-perfect-season-v2.vercel.app`;
           </div>
 
           <p className="small" style={{ color: colors.text }}>
-            Draft Pool: {getDraftPoolLabel(draftPool)}
+            Draft Pool: All Teams
           </p>
 
           <p className="small" style={{ color: colors.text }}>
@@ -670,7 +592,7 @@ Play now: https://the-perfect-season-v2.vercel.app`;
               <div className="stat">{finalRecord}</div>
 
               <p className="small" style={{ color: colors.text }}>
-                Draft Pool: {getDraftPoolLabel(draftPool)}
+                Draft Pool: All Teams
               </p>
 
               <p className="small" style={{ color: colors.text }}>
