@@ -2058,3 +2058,242 @@ button.card {
     transform: translateY(0) scale(1);
   }
 }
+/* Compact game layout fix */
+
+.game-shell {
+  display: grid;
+  grid-template-columns: 320px minmax(360px, 1fr) 380px;
+  gap: 18px;
+  align-items: start;
+  margin-top: 22px;
+}
+
+.draw-box {
+  position: sticky;
+  top: 18px;
+  min-height: auto;
+  padding: 20px;
+  border-radius: 24px;
+}
+
+.available-panel {
+  max-height: 760px;
+  overflow-y: auto;
+}
+
+.roster-panel {
+  max-height: 760px;
+  overflow-y: auto;
+}
+
+/* Move the court/field/diamond into a cleaner full-width compact section */
+
+.surface-card {
+  grid-column: 1 / -1;
+  padding: 18px;
+  border-radius: 24px;
+  margin-top: 0;
+}
+
+.surface-header {
+  margin-bottom: 14px;
+}
+
+.surface-header h2 {
+  font-size: 22px;
+}
+
+.sport-surface {
+  min-height: 360px;
+  border-radius: 22px;
+}
+
+/* Make surface player cards smaller */
+
+.surface-slot {
+  width: 125px;
+  min-height: 68px;
+  padding: 9px;
+  border-radius: 14px;
+}
+
+.surface-slot-label {
+  font-size: 9px;
+  margin-bottom: 4px;
+}
+
+.surface-slot strong {
+  font-size: 11px;
+  line-height: 1.1;
+}
+
+.surface-rating,
+.surface-empty {
+  font-size: 9px;
+  margin-top: 4px;
+}
+
+/* Make top section less tall */
+
+.section {
+  margin-bottom: 18px;
+}
+
+.section h1 {
+  font-size: clamp(34px, 4vw, 54px);
+  margin-bottom: 14px;
+}
+
+.section .subtitle {
+  font-size: 16px;
+  margin-bottom: 12px;
+}
+
+.section .buttons {
+  margin-top: 10px;
+}
+
+/* Make player cards tighter */
+
+.mode-list {
+  gap: 8px;
+}
+
+.mode-list .card,
+.mode-list button.card {
+  padding: 12px;
+  border-radius: 14px;
+}
+
+.game-shell h2 {
+  font-size: 21px;
+  margin-bottom: 12px;
+}
+
+.game-shell .small {
+  font-size: 11.5px;
+}
+
+/* Make rating strip tighter */
+
+.rating-strip {
+  grid-template-columns: repeat(5, 1fr);
+  gap: 7px;
+  margin-bottom: 12px;
+}
+
+.rating-strip div {
+  padding: 9px 7px;
+  border-radius: 13px;
+}
+
+.rating-strip span {
+  font-size: 8px;
+}
+
+.rating-strip strong {
+  font-size: 16px;
+}
+
+/* Make draw card wordmark smaller */
+
+.team-wordmark {
+  font-size: clamp(24px, 2.7vw, 38px);
+}
+
+.team-wordmark-city {
+  font-size: 11px;
+  letter-spacing: 3px;
+  margin-bottom: 5px;
+}
+
+.draw {
+  margin: 12px 0;
+}
+
+/* Keep buttons from making the card too tall */
+
+.game-shell .buttons {
+  gap: 8px;
+}
+
+.game-shell .btn {
+  padding: 9px 12px;
+  min-height: 36px;
+  font-size: 11px;
+}
+
+/* Better desktop scrolling panels */
+
+.available-panel::-webkit-scrollbar,
+.roster-panel::-webkit-scrollbar {
+  width: 8px;
+}
+
+.available-panel::-webkit-scrollbar-thumb,
+.roster-panel::-webkit-scrollbar-thumb {
+  background: rgba(245, 197, 66, 0.45);
+  border-radius: 999px;
+}
+
+.available-panel::-webkit-scrollbar-track,
+.roster-panel::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* Tablet */
+
+@media (max-width: 1180px) {
+  .game-shell {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .draw-box {
+    position: static;
+  }
+
+  .surface-card,
+  .roster-panel {
+    grid-column: 1 / -1;
+  }
+
+  .available-panel,
+  .roster-panel {
+    max-height: none;
+    overflow: visible;
+  }
+
+  .sport-surface {
+    min-height: 520px;
+  }
+}
+
+/* Mobile */
+
+@media (max-width: 768px) {
+  .game-shell {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .surface-card,
+  .roster-panel {
+    grid-column: auto;
+  }
+
+  .sport-surface {
+    min-height: 760px;
+  }
+
+  .section h1 {
+    font-size: 34px;
+  }
+
+  .team-wordmark {
+    font-size: clamp(26px, 10vw, 38px);
+  }
+
+  .rating-strip {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
