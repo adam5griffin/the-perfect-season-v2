@@ -30,7 +30,7 @@ export default function Home() {
 
         <div className="card hero-art-card">
           <img
-            src="/perfect-season-artwork.jpeg"
+            src="/6CABEE02-7EE0-4FAC-A914-A01E08B93205.png"
             alt="Perfect Season sports artwork"
             className="hero-art"
           />
