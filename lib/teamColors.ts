@@ -7,341 +7,107 @@ export type TeamColor = {
 };
 
 export const teamColors: Record<string, TeamColor> = {
-  // NBA — ATLANTIC
-  'Boston Celtics': {
-    primary: '#007A33',
-    secondary: '#BA9653',
-    accent: '#963821',
-    alternate: '#FFFFFF',
-    text: '#FFFFFF',
-  },
+  // NBA
+  'Atlanta Hawks': { primary: '#E03A3E', secondary: '#C1D32F', accent: '#26282A', alternate: '#FFFFFF', text: '#FFFFFF' },
+  'Boston Celtics': { primary: '#007A33', secondary: '#BA9653', accent: '#963821', alternate: '#FFFFFF', text: '#FFFFFF' },
+  'Brooklyn Nets': { primary: '#000000', secondary: '#FFFFFF', accent: '#777D84', alternate: '#111111', text: '#FFFFFF' },
+  'Charlotte Hornets': { primary: '#1D1160', secondary: '#00788C', accent: '#A1A1A4', alternate: '#FFFFFF', text: '#FFFFFF' },
+  'Chicago Bulls': { primary: '#CE1141', secondary: '#000000', accent: '#FFFFFF', alternate: '#C4CED4', text: '#FFFFFF' },
+  'Cleveland Cavaliers': { primary: '#860038', secondary: '#FDBB30', accent: '#041E42', alternate: '#000000', text: '#FFFFFF' },
+  'Dallas Mavericks': { primary: '#00538C', secondary: '#002B5E', accent: '#B8C4CA', alternate: '#000000', text: '#FFFFFF' },
+  'Denver Nuggets': { primary: '#0E2240', secondary: '#FEC524', accent: '#8B2131', alternate: '#1D428A', text: '#FFFFFF' },
+  'Detroit Pistons': { primary: '#C8102E', secondary: '#1D42BA', accent: '#BEC0C2', alternate: '#FFFFFF', text: '#FFFFFF' },
+  'Golden State Warriors': { primary: '#1D428A', secondary: '#FFC72C', accent: '#FFFFFF', alternate: '#26282A', text: '#FFFFFF' },
+  'Houston Rockets': { primary: '#CE1141', secondary: '#000000', accent: '#C4CED4', alternate: '#FFFFFF', text: '#FFFFFF' },
+  'Indiana Pacers': { primary: '#002D62', secondary: '#FDBB30', accent: '#BEC0C2', alternate: '#FFFFFF', text: '#FFFFFF' },
+  'Los Angeles Clippers': { primary: '#C8102E', secondary: '#1D428A', accent: '#000000', alternate: '#FFFFFF', text: '#FFFFFF' },
+  'LA Clippers': { primary: '#C8102E', secondary: '#1D428A', accent: '#000000', alternate: '#FFFFFF', text: '#FFFFFF' },
+  'Los Angeles Lakers': { primary: '#552583', secondary: '#FDB927', accent: '#FFFFFF', alternate: '#000000', text: '#FFFFFF' },
+  'Memphis Grizzlies': { primary: '#5D76A9', secondary: '#12173F', accent: '#F5B112', alternate: '#707271', text: '#FFFFFF' },
+  'Miami Heat': { primary: '#98002E', secondary: '#F9A01B', accent: '#000000', alternate: '#FFFFFF', text: '#FFFFFF' },
+  'Milwaukee Bucks': { primary: '#00471B', secondary: '#EEE1C6', accent: '#0077C0', alternate: '#000000', text: '#FFFFFF' },
+  'Minnesota Timberwolves': { primary: '#0C2340', secondary: '#236192', accent: '#78BE20', alternate: '#9EA2A2', text: '#FFFFFF' },
+  'New Orleans Pelicans': { primary: '#0C2340', secondary: '#C8102E', accent: '#85714D', alternate: '#FFFFFF', text: '#FFFFFF' },
+  'New York Knicks': { primary: '#006BB6', secondary: '#F58426', accent: '#BEC0C2', alternate: '#FFFFFF', text: '#FFFFFF' },
+  'Oklahoma City Thunder': { primary: '#007AC1', secondary: '#EF3B24', accent: '#FDBB30', alternate: '#002D62', text: '#FFFFFF' },
+  'Orlando Magic': { primary: '#0077C0', secondary: '#C4CED4', accent: '#000000', alternate: '#FFFFFF', text: '#FFFFFF' },
+  'Philadelphia 76ers': { primary: '#006BB6', secondary: '#ED174C', accent: '#002B5C', alternate: '#FFFFFF', text: '#FFFFFF' },
+  'Phoenix Suns': { primary: '#1D1160', secondary: '#E56020', accent: '#F9A01B', alternate: '#000000', text: '#FFFFFF' },
+  'Portland Trail Blazers': { primary: '#E03A3E', secondary: '#000000', accent: '#FFFFFF', alternate: '#C4CED4', text: '#FFFFFF' },
+  'Sacramento Kings': { primary: '#5A2D81', secondary: '#63727A', accent: '#000000', alternate: '#FFFFFF', text: '#FFFFFF' },
+  'San Antonio Spurs': { primary: '#000000', secondary: '#C4CED4', accent: '#FFFFFF', alternate: '#8A8D8F', text: '#FFFFFF' },
+  'Toronto Raptors': { primary: '#CE1141', secondary: '#000000', accent: '#A1A1A4', alternate: '#FFFFFF', text: '#FFFFFF' },
+  'Utah Jazz': { primary: '#002B5C', secondary: '#00471B', accent: '#F9A01B', alternate: '#FFFFFF', text: '#FFFFFF' },
+  'Washington Wizards': { primary: '#002B5C', secondary: '#E31837', accent: '#C4CED4', alternate: '#FFFFFF', text: '#FFFFFF' },
 
-  'Brooklyn Nets': {
-    primary: '#000000',
-    secondary: '#FFFFFF',
-    accent: '#777D84',
-    alternate: '#111111',
-    text: '#FFFFFF',
-  },
+  // NFL
+  'Arizona Cardinals': { primary: '#97233F', secondary: '#000000', accent: '#FFB612', alternate: '#FFFFFF', text: '#FFFFFF' },
+  'Atlanta Falcons': { primary: '#A71930', secondary: '#000000', accent: '#A5ACAF', alternate: '#FFFFFF', text: '#FFFFFF' },
+  'Baltimore Ravens': { primary: '#241773', secondary: '#000000', accent: '#9E7C0C', alternate: '#C60C30', text: '#FFFFFF' },
+  'Buffalo Bills': { primary: '#00338D', secondary: '#C60C30', accent: '#FFFFFF', alternate: '#00274D', text: '#FFFFFF' },
+  'Carolina Panthers': { primary: '#0085CA', secondary: '#101820', accent: '#BFC0BF', alternate: '#FFFFFF', text: '#FFFFFF' },
+  'Chicago Bears': { primary: '#0B162A', secondary: '#C83803', accent: '#FFFFFF', alternate: '#A5ACAF', text: '#FFFFFF' },
+  'Cincinnati Bengals': { primary: '#FB4F14', secondary: '#000000', accent: '#FFFFFF', alternate: '#222222', text: '#FFFFFF' },
+  'Cleveland Browns': { primary: '#311D00', secondary: '#FF3C00', accent: '#FFFFFF', alternate: '#A5ACAF', text: '#FFFFFF' },
+  'Dallas Cowboys': { primary: '#041E42', secondary: '#869397', accent: '#003594', alternate: '#FFFFFF', text: '#FFFFFF' },
+  'Denver Broncos': { primary: '#FB4F14', secondary: '#002244', accent: '#FFFFFF', alternate: '#A5ACAF', text: '#FFFFFF' },
+  'Detroit Lions': { primary: '#0076B6', secondary: '#B0B7BC', accent: '#000000', alternate: '#FFFFFF', text: '#FFFFFF' },
+  'Green Bay Packers': { primary: '#203731', secondary: '#FFB612', accent: '#FFFFFF', alternate: '#000000', text: '#FFFFFF' },
+  'Houston Texans': { primary: '#03202F', secondary: '#A71930', accent: '#FFFFFF', alternate: '#0080C5', text: '#FFFFFF' },
+  'Indianapolis Colts': { primary: '#002C5F', secondary: '#A2AAAD', accent: '#FFFFFF', alternate: '#000000', text: '#FFFFFF' },
+  'Jacksonville Jaguars': { primary: '#101820', secondary: '#D7A22A', accent: '#006778', alternate: '#9F792C', text: '#FFFFFF' },
+  'Kansas City Chiefs': { primary: '#E31837', secondary: '#FFB81C', accent: '#FFFFFF', alternate: '#000000', text: '#FFFFFF' },
+  'Las Vegas Raiders': { primary: '#000000', secondary: '#A5ACAF', accent: '#FFFFFF', alternate: '#222222', text: '#FFFFFF' },
+  'Oakland Raiders': { primary: '#000000', secondary: '#A5ACAF', accent: '#FFFFFF', alternate: '#222222', text: '#FFFFFF' },
+  'Los Angeles Chargers': { primary: '#0080C6', secondary: '#FFC20E', accent: '#002A5E', alternate: '#FFFFFF', text: '#FFFFFF' },
+  'Los Angeles Rams': { primary: '#003594', secondary: '#FFA300', accent: '#FFFFFF', alternate: '#FFD100', text: '#FFFFFF' },
+  'Miami Dolphins': { primary: '#008E97', secondary: '#FC4C02', accent: '#005778', alternate: '#FFFFFF', text: '#FFFFFF' },
+  'Minnesota Vikings': { primary: '#4F2683', secondary: '#FFC62F', accent: '#FFFFFF', alternate: '#000000', text: '#FFFFFF' },
+  'New England Patriots': { primary: '#002244', secondary: '#C60C30', accent: '#B0B7BC', alternate: '#FFFFFF', text: '#FFFFFF' },
+  'New Orleans Saints': { primary: '#D3BC8D', secondary: '#101820', accent: '#FFFFFF', alternate: '#A08A58', text: '#FFFFFF' },
+  'New York Giants': { primary: '#0B2265', secondary: '#A71930', accent: '#A5ACAF', alternate: '#FFFFFF', text: '#FFFFFF' },
+  'New York Jets': { primary: '#125740', secondary: '#000000', accent: '#FFFFFF', alternate: '#A5ACAF', text: '#FFFFFF' },
+  'Philadelphia Eagles': { primary: '#004C54', secondary: '#A5ACAF', accent: '#ACC0C6', alternate: '#000000', text: '#FFFFFF' },
+  'Pittsburgh Steelers': { primary: '#FFB612', secondary: '#101820', accent: '#003087', alternate: '#C60C30', text: '#FFFFFF' },
+  'San Francisco 49ers': { primary: '#AA0000', secondary: '#B3995D', accent: '#FFFFFF', alternate: '#000000', text: '#FFFFFF' },
+  'Seattle Seahawks': { primary: '#002244', secondary: '#69BE28', accent: '#A5ACAF', alternate: '#FFFFFF', text: '#FFFFFF' },
+  'Tampa Bay Buccaneers': { primary: '#D50A0A', secondary: '#34302B', accent: '#FF7900', alternate: '#B1BABF', text: '#FFFFFF' },
+  'Tennessee Titans': { primary: '#0C2340', secondary: '#4B92DB', accent: '#C8102E', alternate: '#8A8D8F', text: '#FFFFFF' },
+  'Washington Commanders': { primary: '#5A1414', secondary: '#FFB612', accent: '#FFFFFF', alternate: '#000000', text: '#FFFFFF' },
 
-  'New York Knicks': {
-    primary: '#006BB6',
-    secondary: '#F58426',
-    accent: '#BEC0C2',
-    alternate: '#FFFFFF',
-    text: '#FFFFFF',
-  },
-
-  'Philadelphia 76ers': {
-    primary: '#006BB6',
-    secondary: '#ED174C',
-    accent: '#002B5C',
-    alternate: '#FFFFFF',
-    text: '#FFFFFF',
-  },
-
-  'Toronto Raptors': {
-    primary: '#CE1141',
-    secondary: '#000000',
-    accent: '#A1A1A4',
-    alternate: '#FFFFFF',
-    text: '#FFFFFF',
-  },
-
-  // NBA — CENTRAL
-  'Chicago Bulls': {
-    primary: '#CE1141',
-    secondary: '#000000',
-    accent: '#FFFFFF',
-    alternate: '#C4CED4',
-    text: '#FFFFFF',
-  },
-
-  'Cleveland Cavaliers': {
-    primary: '#860038',
-    secondary: '#FDBB30',
-    accent: '#041E42',
-    alternate: '#000000',
-    text: '#FFFFFF',
-  },
-
-  'Detroit Pistons': {
-    primary: '#C8102E',
-    secondary: '#1D42BA',
-    accent: '#BEC0C2',
-    alternate: '#FFFFFF',
-    text: '#FFFFFF',
-  },
-
-  'Indiana Pacers': {
-    primary: '#002D62',
-    secondary: '#FDBB30',
-    accent: '#BEC0C2',
-    alternate: '#FFFFFF',
-    text: '#FFFFFF',
-  },
-
-  'Milwaukee Bucks': {
-    primary: '#00471B',
-    secondary: '#EEE1C6',
-    accent: '#0077C0',
-    alternate: '#000000',
-    text: '#FFFFFF',
-  },
-
-  // NBA — SOUTHEAST
-  'Atlanta Hawks': {
-    primary: '#E03A3E',
-    secondary: '#C1D32F',
-    accent: '#26282A',
-    alternate: '#FFFFFF',
-    text: '#FFFFFF',
-  },
-
-  'Charlotte Hornets': {
-    primary: '#1D1160',
-    secondary: '#00788C',
-    accent: '#A1A1A4',
-    alternate: '#FFFFFF',
-    text: '#FFFFFF',
-  },
-
-  'Miami Heat': {
-    primary: '#98002E',
-    secondary: '#F9A01B',
-    accent: '#000000',
-    alternate: '#FFFFFF',
-    text: '#FFFFFF',
-  },
-
-  'Orlando Magic': {
-    primary: '#0077C0',
-    secondary: '#C4CED4',
-    accent: '#000000',
-    alternate: '#FFFFFF',
-    text: '#FFFFFF',
-  },
-
-  'Washington Wizards': {
-    primary: '#002B5C',
-    secondary: '#E31837',
-    accent: '#C4CED4',
-    alternate: '#FFFFFF',
-    text: '#FFFFFF',
-  },
-
-  // NBA — NORTHWEST
-  'Denver Nuggets': {
-    primary: '#0E2240',
-    secondary: '#FEC524',
-    accent: '#8B2131',
-    alternate: '#1D428A',
-    text: '#FFFFFF',
-  },
-
-  'Minnesota Timberwolves': {
-    primary: '#0C2340',
-    secondary: '#236192',
-    accent: '#78BE20',
-    alternate: '#9EA2A2',
-    text: '#FFFFFF',
-  },
-
-  'Oklahoma City Thunder': {
-    primary: '#007AC1',
-    secondary: '#EF3B24',
-    accent: '#FDBB30',
-    alternate: '#002D62',
-    text: '#FFFFFF',
-  },
-
-  'Portland Trail Blazers': {
-    primary: '#E03A3E',
-    secondary: '#000000',
-    accent: '#FFFFFF',
-    alternate: '#C4CED4',
-    text: '#FFFFFF',
-  },
-
-  'Utah Jazz': {
-    primary: '#002B5C',
-    secondary: '#00471B',
-    accent: '#F9A01B',
-    alternate: '#FFFFFF',
-    text: '#FFFFFF',
-  },
-
-  // NBA — PACIFIC
-  'Golden State Warriors': {
-    primary: '#1D428A',
-    secondary: '#FFC72C',
-    accent: '#FFFFFF',
-    alternate: '#26282A',
-    text: '#FFFFFF',
-  },
-
-  'Los Angeles Clippers': {
-    primary: '#C8102E',
-    secondary: '#1D428A',
-    accent: '#000000',
-    alternate: '#FFFFFF',
-    text: '#FFFFFF',
-  },
-
-  'LA Clippers': {
-    primary: '#C8102E',
-    secondary: '#1D428A',
-    accent: '#000000',
-    alternate: '#FFFFFF',
-    text: '#FFFFFF',
-  },
-
-  'Los Angeles Lakers': {
-    primary: '#552583',
-    secondary: '#FDB927',
-    accent: '#FFFFFF',
-    alternate: '#000000',
-    text: '#FFFFFF',
-  },
-
-  'Phoenix Suns': {
-    primary: '#1D1160',
-    secondary: '#E56020',
-    accent: '#F9A01B',
-    alternate: '#000000',
-    text: '#FFFFFF',
-  },
-
-  'Sacramento Kings': {
-    primary: '#5A2D81',
-    secondary: '#63727A',
-    accent: '#000000',
-    alternate: '#FFFFFF',
-    text: '#FFFFFF',
-  },
-
-  // NBA — SOUTHWEST
-  'Dallas Mavericks': {
-    primary: '#00538C',
-    secondary: '#002B5E',
-    accent: '#B8C4CA',
-    alternate: '#000000',
-    text: '#FFFFFF',
-  },
-
-  'Houston Rockets': {
-    primary: '#CE1141',
-    secondary: '#000000',
-    accent: '#C4CED4',
-    alternate: '#FFFFFF',
-    text: '#FFFFFF',
-  },
-
-  'Memphis Grizzlies': {
-    primary: '#5D76A9',
-    secondary: '#12173F',
-    accent: '#F5B112',
-    alternate: '#707271',
-    text: '#FFFFFF',
-  },
-
-  'New Orleans Pelicans': {
-    primary: '#0C2340',
-    secondary: '#C8102E',
-    accent: '#85714D',
-    alternate: '#FFFFFF',
-    text: '#FFFFFF',
-  },
-
-  'San Antonio Spurs': {
-    primary: '#000000',
-    secondary: '#C4CED4',
-    accent: '#FFFFFF',
-    alternate: '#8A8D8F',
-    text: '#FFFFFF',
-  },
-
-  // NFL — starter colors
-  'Dallas Cowboys': {
-    primary: '#041E42',
-    secondary: '#869397',
-    accent: '#FFFFFF',
-    alternate: '#003594',
-    text: '#FFFFFF',
-  },
-
-  'Kansas City Chiefs': {
-    primary: '#E31837',
-    secondary: '#FFB81C',
-    accent: '#FFFFFF',
-    alternate: '#000000',
-    text: '#FFFFFF',
-  },
-
-  'San Francisco 49ers': {
-    primary: '#AA0000',
-    secondary: '#B3995D',
-    accent: '#FFFFFF',
-    alternate: '#000000',
-    text: '#FFFFFF',
-  },
-
-  'New England Patriots': {
-    primary: '#002244',
-    secondary: '#C60C30',
-    accent: '#B0B7BC',
-    alternate: '#FFFFFF',
-    text: '#FFFFFF',
-  },
-
-  'Pittsburgh Steelers': {
-    primary: '#000000',
-    secondary: '#FFB612',
-    accent: '#C60C30',
-    alternate: '#00539B',
-    text: '#FFFFFF',
-  },
-
-  // MLB — starter colors
-  'Los Angeles Dodgers': {
-    primary: '#005A9C',
-    secondary: '#FFFFFF',
-    accent: '#EF3E42',
-    alternate: '#A5ACAF',
-    text: '#FFFFFF',
-  },
-
-  'New York Yankees': {
-    primary: '#0C2340',
-    secondary: '#C4CED3',
-    accent: '#FFFFFF',
-    alternate: '#003087',
-    text: '#FFFFFF',
-  },
-
-  'Boston Red Sox': {
-    primary: '#BD3039',
-    secondary: '#0C2340',
-    accent: '#FFFFFF',
-    alternate: '#C4CED4',
-    text: '#FFFFFF',
-  },
-
-  'San Francisco Giants': {
-    primary: '#FD5A1E',
-    secondary: '#27251F',
-    accent: '#EFD19F',
-    alternate: '#FFFFFF',
-    text: '#FFFFFF',
-  },
-
-  'Chicago Cubs': {
-    primary: '#0E3386',
-    secondary: '#CC3433',
-    accent: '#FFFFFF',
-    alternate: '#C4CED4',
-    text: '#FFFFFF',
-  },
+  // MLB
+  'Arizona Diamondbacks': { primary: '#A71930', secondary: '#E3D4AD', accent: '#000000', alternate: '#30CED8', text: '#FFFFFF' },
+  'Atlanta Braves': { primary: '#CE1141', secondary: '#13274F', accent: '#EAAA00', alternate: '#FFFFFF', text: '#FFFFFF' },
+  'Baltimore Orioles': { primary: '#DF4601', secondary: '#000000', accent: '#FFFFFF', alternate: '#A2AAAD', text: '#FFFFFF' },
+  'Boston Red Sox': { primary: '#BD3039', secondary: '#0C2340', accent: '#FFFFFF', alternate: '#C4CED4', text: '#FFFFFF' },
+  'Chicago Cubs': { primary: '#0E3386', secondary: '#CC3433', accent: '#FFFFFF', alternate: '#C4CED4', text: '#FFFFFF' },
+  'Chicago White Sox': { primary: '#27251F', secondary: '#C4CED4', accent: '#FFFFFF', alternate: '#000000', text: '#FFFFFF' },
+  'Cincinnati Reds': { primary: '#C6011F', secondary: '#000000', accent: '#FFFFFF', alternate: '#A2AAAD', text: '#FFFFFF' },
+  'Cleveland Guardians': { primary: '#00385D', secondary: '#E50022', accent: '#FFFFFF', alternate: '#C4CED4', text: '#FFFFFF' },
+  'Cleveland Indians': { primary: '#00385D', secondary: '#E50022', accent: '#FFFFFF', alternate: '#C4CED4', text: '#FFFFFF' },
+  'Colorado Rockies': { primary: '#333366', secondary: '#C4CED4', accent: '#131413', alternate: '#FFFFFF', text: '#FFFFFF' },
+  'Detroit Tigers': { primary: '#0C2340', secondary: '#FA4616', accent: '#FFFFFF', alternate: '#C4CED4', text: '#FFFFFF' },
+  'Houston Astros': { primary: '#002D62', secondary: '#EB6E1F', accent: '#F4911E', alternate: '#FFFFFF', text: '#FFFFFF' },
+  'Kansas City Royals': { primary: '#004687', secondary: '#BD9B60', accent: '#FFFFFF', alternate: '#7AB2DD', text: '#FFFFFF' },
+  'Los Angeles Angels': { primary: '#BA0021', secondary: '#003263', accent: '#C4CED4', alternate: '#FFFFFF', text: '#FFFFFF' },
+  'Los Angeles Dodgers': { primary: '#005A9C', secondary: '#FFFFFF', accent: '#EF3E42', alternate: '#A5ACAF', text: '#FFFFFF' },
+  'Miami Marlins': { primary: '#00A3E0', secondary: '#EF3340', accent: '#41748D', alternate: '#000000', text: '#FFFFFF' },
+  'Milwaukee Brewers': { primary: '#12284B', secondary: '#FFC52F', accent: '#FFFFFF', alternate: '#C4CED4', text: '#FFFFFF' },
+  'Minnesota Twins': { primary: '#002B5C', secondary: '#D31145', accent: '#B9975B', alternate: '#FFFFFF', text: '#FFFFFF' },
+  'New York Mets': { primary: '#002D72', secondary: '#FF5910', accent: '#FFFFFF', alternate: '#C4CED4', text: '#FFFFFF' },
+  'New York Yankees': { primary: '#0C2340', secondary: '#C4CED3', accent: '#FFFFFF', alternate: '#003087', text: '#FFFFFF' },
+  'Oakland Athletics': { primary: '#003831', secondary: '#EFB21E', accent: '#A2AAAD', alternate: '#FFFFFF', text: '#FFFFFF' },
+  'Athletics': { primary: '#003831', secondary: '#EFB21E', accent: '#A2AAAD', alternate: '#FFFFFF', text: '#FFFFFF' },
+  'Philadelphia Phillies': { primary: '#E81828', secondary: '#002D72', accent: '#FFFFFF', alternate: '#C4CED4', text: '#FFFFFF' },
+  'Pittsburgh Pirates': { primary: '#27251F', secondary: '#FDB827', accent: '#FFFFFF', alternate: '#C4CED4', text: '#FFFFFF' },
+  'San Diego Padres': { primary: '#2F241D', secondary: '#FFC425', accent: '#FFFFFF', alternate: '#A2AAAD', text: '#FFFFFF' },
+  'San Francisco Giants': { primary: '#FD5A1E', secondary: '#27251F', accent: '#EFD19F', alternate: '#FFFFFF', text: '#FFFFFF' },
+  'Seattle Mariners': { primary: '#0C2C56', secondary: '#005C5C', accent: '#C4CED4', alternate: '#FFFFFF', text: '#FFFFFF' },
+  'St. Louis Cardinals': { primary: '#C41E3A', secondary: '#0C2340', accent: '#FEDB00', alternate: '#FFFFFF', text: '#FFFFFF' },
+  'Tampa Bay Rays': { primary: '#092C5C', secondary: '#8FBCE6', accent: '#F5D130', alternate: '#FFFFFF', text: '#FFFFFF' },
+  'Texas Rangers': { primary: '#003278', secondary: '#C0111F', accent: '#FFFFFF', alternate: '#C4CED4', text: '#FFFFFF' },
+  'Toronto Blue Jays': { primary: '#134A8E', secondary: '#1D2D5C', accent: '#E8291C', alternate: '#FFFFFF', text: '#FFFFFF' },
+  'Washington Nationals': { primary: '#AB0003', secondary: '#14225A', accent: '#FFFFFF', alternate: '#C4CED4', text: '#FFFFFF' },
 };
 
 export function getTeamColors(teamName: string): TeamColor {
