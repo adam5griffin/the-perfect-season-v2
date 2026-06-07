@@ -1,10 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useParams } from 'next/navigation';
 import Nav from '../../../components/Nav';
 import { getTeamColors } from '../../../lib/teamColors';
-import { getTeamFont } from '../../../lib/teamFonts';
+import { getTeamWordmark } from '../../../lib/teamFonts';
 import {
   sports,
   SportKey,
@@ -245,7 +245,7 @@ export default function SportGame() {
   );
 
   const colors = getTeamColors(selectedSeason.team);
-  const teamFont = getTeamFont(selectedSeason.team);
+  const teamWordmark = getTeamWordmark(selectedSeason.team);
 
   const [mode, setMode] = useState<'casual' | 'ultimate'>('casual');
   const [reSpins, setReSpins] = useState<number>(sport.reSpins);
@@ -448,15 +448,19 @@ Play now: https://the-perfect-season-v2.vercel.app`;
           </p>
 
           <div
-            className="draw"
-            style={{
-              fontFamily: teamFont.fontFamily,
-              letterSpacing: teamFont.letterSpacing,
-              textTransform: teamFont.textTransform,
-              fontStyle: teamFont.fontStyle || 'normal',
-            }}
+            className={`draw team-wordmark ${teamWordmark.style} ${
+              teamWordmark.shape || 'normal'
+            }`}
+            style={
+              {
+                '--team-wordmark-main': colors.secondary,
+                '--team-wordmark-stroke': colors.primary,
+                '--team-wordmark-shadow': colors.accent,
+              } as React.CSSProperties
+            }
           >
-            {selectedSeason.displayName}
+            <span className="team-wordmark-city">{selectedSeason.year}</span>
+            <span className="team-wordmark-name">{selectedSeason.team}</span>
           </div>
 
           {selectedSeason.isFeatured && (
