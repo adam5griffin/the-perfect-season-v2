@@ -28,19 +28,12 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="card">
-          <span className="pill">Ultimate Mode</span>
-
-          <h2>No re-spins. No excuses.</h2>
-
-          <p className="muted">
-            Every team-season draw is final. Build the best roster possible
-            and compete for leaderboard immortality.
-          </p>
-
-          <div className="stat">0</div>
-
-          <p className="small">Re-spins allowed in Ultimate Mode</p>
+        <div className="card hero-art-card">
+          <img
+            src="/perfect-season-artwork.jpeg"
+            alt="Perfect Season sports artwork"
+            className="hero-art"
+          />
         </div>
       </section>
 
