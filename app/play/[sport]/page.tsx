@@ -139,6 +139,7 @@ function calculateDefenseRating(
 
   if (sportKey === 'nba') defenseSlots = ['C', 'PF', 'SF'];
   if (sportKey === 'nfl') defenseSlots = ['Team Defense'];
+
   if (sportKey === 'mlb') {
     defenseSlots = ['SP1', 'SP2', 'SP3', 'SP4', 'SP5', 'Bullpen'];
   }
@@ -462,6 +463,13 @@ Play now: https://the-perfect-season-v2.vercel.app`;
     alert('Share card copied!');
   }
 
+  const cursorClass =
+    sportKey === 'nba'
+      ? 'cursor-basketball'
+      : sportKey === 'mlb'
+      ? 'cursor-baseball'
+      : 'cursor-football';
+
   return (
     <main className="page">
       <Nav />
@@ -608,7 +616,7 @@ Play now: https://the-perfect-season-v2.vercel.app`;
               return (
                 <button
                   key={`${selectedSeason.id}-${player.name}`}
-                  className={`card player-option ${
+                  className={`card player-option ${cursorClass} ${
                     beingSelected ? 'player-option-selected' : ''
                   }`}
                   onClick={() => selectPlayer(player)}
@@ -619,7 +627,7 @@ Play now: https://the-perfect-season-v2.vercel.app`;
                     cursor:
                       alreadySelected || beingSelected || isShuffling
                         ? 'not-allowed'
-                        : 'pointer',
+                        : undefined,
                     opacity: alreadySelected ? 0.5 : 1,
                   }}
                 >
