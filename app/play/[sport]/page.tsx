@@ -31,18 +31,14 @@ function getPlayerSlotOptions(player: Player, rosterSlots: readonly string[]) {
   const position = player.position;
   const options: string[] = [];
 
-  if (rosterSlots.includes(position)) {
-    options.push(position);
-  }
+  if (rosterSlots.includes(position)) options.push(position);
 
   if (['PG', 'SG', 'SF', 'PF', 'C'].includes(position)) {
     if (rosterSlots.includes(position)) options.push(position);
     if (rosterSlots.includes('6th Man')) options.push('6th Man');
   }
 
-  if (position === 'QB' && rosterSlots.includes('QB')) {
-    options.push('QB');
-  }
+  if (position === 'QB' && rosterSlots.includes('QB')) options.push('QB');
 
   if (position === 'RB') {
     if (rosterSlots.includes('RB')) options.push('RB');
@@ -70,9 +66,7 @@ function getPlayerSlotOptions(player: Player, rosterSlots: readonly string[]) {
 
   if (position === 'SP') {
     rosterSlots.forEach((slot) => {
-      if (slot.startsWith('SP')) {
-        options.push(slot);
-      }
+      if (slot.startsWith('SP')) options.push(slot);
     });
   }
 
@@ -94,9 +88,7 @@ function findOpenRosterSlot(
   const slotOptions = getPlayerSlotOptions(player, rosterSlots);
   const openMatchingSlot = slotOptions.find((slot) => !currentRoster[slot]);
 
-  if (openMatchingSlot) {
-    return openMatchingSlot;
-  }
+  if (openMatchingSlot) return openMatchingSlot;
 
   const firstOpenSlot = rosterSlots.find((slot) => !currentRoster[slot]);
   return firstOpenSlot || null;
@@ -145,14 +137,8 @@ function calculateDefenseRating(
 ) {
   let defenseSlots: string[] = [];
 
-  if (sportKey === 'nba') {
-    defenseSlots = ['C', 'PF', 'SF'];
-  }
-
-  if (sportKey === 'nfl') {
-    defenseSlots = ['Team Defense'];
-  }
-
+  if (sportKey === 'nba') defenseSlots = ['C', 'PF', 'SF'];
+  if (sportKey === 'nfl') defenseSlots = ['Team Defense'];
   if (sportKey === 'mlb') {
     defenseSlots = ['SP1', 'SP2', 'SP3', 'SP4', 'SP5', 'Bullpen'];
   }
@@ -265,6 +251,15 @@ export default function SportGame() {
     () => createEmptyRoster(sport.roster)
   );
 
+  const [lastDraftedPlayer, setLastDraftedPlayer] = useState<Player | null>(
+    null
+  );
+  const [lastDraftedSlot, setLastDraftedSlot] = useState<string | null>(null);
+  const [selectedPlayerName, setSelectedPlayerName] = useState<string | null>(
+    null
+  );
+  const [isShuffling, setIsShuffling] = useState(false);
+
   const currentReSpins = mode === 'ultimate' ? 0 : reSpins;
   const filledSlots = sport.roster.filter((slot) => userRoster[slot]).length;
   const totalSlots = sport.roster.length;
@@ -292,27 +287,53 @@ export default function SportGame() {
     setPerfectSeasonChance(null);
   }
 
+  function clearDraftAnimations() {
+    setLastDraftedPlayer(null);
+    setLastDraftedSlot(null);
+    setSelectedPlayerName(null);
+  }
+
+  function drawNextSeason() {
+    setIsShuffling(true);
+
+    setTimeout(() => {
+      setSelectedSeason(getRandomSeason(sportKey));
+      setIsShuffling(false);
+    }, 360);
+  }
+
   function resetGame(nextMode = mode) {
     setSelectedSeason(getRandomSeason(sportKey));
     setReSpins(nextMode === 'ultimate' ? 0 : sport.reSpins);
     clearResults();
+    clearDraftAnimations();
     resetRoster();
   }
 
   function reSpinTeam() {
     if (currentReSpins <= 0) return;
 
-    setSelectedSeason(getRandomSeason(sportKey));
+    setIsShuffling(true);
     setReSpins((current) => Math.max(current - 1, 0));
     clearResults();
+
+    setTimeout(() => {
+      setSelectedSeason(getRandomSeason(sportKey));
+      setIsShuffling(false);
+    }, 360);
   }
 
   function reSpinYear() {
     if (currentReSpins <= 0) return;
 
-    setSelectedSeason(getRandomSeasonByTeam(sportKey, selectedSeason.team));
+    setIsShuffling(true);
     setReSpins((current) => Math.max(current - 1, 0));
     clearResults();
+
+    setTimeout(() => {
+      setSelectedSeason(getRandomSeasonByTeam(sportKey, selectedSeason.team));
+      setIsShuffling(false);
+    }, 360);
   }
 
   function playerAlreadySelected(player: Player) {
@@ -334,13 +355,19 @@ export default function SportGame() {
       return;
     }
 
-    setUserRoster((currentRoster) => ({
-      ...currentRoster,
-      [slot]: player,
-    }));
+    setSelectedPlayerName(player.name);
 
-    setSelectedSeason(getRandomSeason(sportKey));
-    clearResults();
+    setTimeout(() => {
+      setUserRoster((currentRoster) => ({
+        ...currentRoster,
+        [slot]: player,
+      }));
+
+      setLastDraftedPlayer(player);
+      setLastDraftedSlot(slot);
+      clearResults();
+      drawNextSeason();
+    }, 180);
   }
 
   function removePlayer(slot: string) {
@@ -348,6 +375,11 @@ export default function SportGame() {
       ...currentRoster,
       [slot]: null,
     }));
+
+    if (lastDraftedSlot === slot) {
+      setLastDraftedSlot(null);
+      setLastDraftedPlayer(null);
+    }
 
     clearResults();
   }
@@ -436,7 +468,7 @@ Play now: https://the-perfect-season-v2.vercel.app`;
 
       <section className="game-shell">
         <div
-          className="card draw-box"
+          className={`card draw-box ${isShuffling ? 'draw-box-shuffling' : ''}`}
           style={{
             background: `linear-gradient(135deg, ${colors.primary}, ${colors.secondary})`,
             color: colors.text,
@@ -450,7 +482,7 @@ Play now: https://the-perfect-season-v2.vercel.app`;
           <div
             className={`draw team-wordmark ${teamWordmark.style} ${
               teamWordmark.shape || 'normal'
-            }`}
+            } ${isShuffling ? 'wordmark-shuffling' : ''}`}
             style={
               {
                 '--team-wordmark-main': colors.secondary,
@@ -471,6 +503,14 @@ Play now: https://the-perfect-season-v2.vercel.app`;
                 ? 'Legendary Roster'
                 : 'Featured Roster'}
             </span>
+          )}
+
+          {lastDraftedPlayer && (
+            <div className="draft-toast">
+              <span>Drafted</span>
+              <strong>{lastDraftedPlayer.name}</strong>
+              <small>{lastDraftedSlot}</small>
+            </div>
           )}
 
           <p className="muted" style={{ color: colors.text }}>
@@ -501,23 +541,29 @@ Play now: https://the-perfect-season-v2.vercel.app`;
           </p>
         </div>
 
-        <div className="card">
+        <div className="card available-panel">
           <h2>Available Players</h2>
 
           <div className="mode-list">
             {selectedSeason.players.map((player) => {
               const alreadySelected = playerAlreadySelected(player);
+              const beingSelected = selectedPlayerName === player.name;
 
               return (
                 <button
                   key={`${selectedSeason.id}-${player.name}`}
-                  className="card"
+                  className={`card player-option ${
+                    beingSelected ? 'player-option-selected' : ''
+                  }`}
                   onClick={() => selectPlayer(player)}
-                  disabled={alreadySelected}
+                  disabled={alreadySelected || beingSelected || isShuffling}
                   style={{
                     textAlign: 'left',
                     color: 'white',
-                    cursor: alreadySelected ? 'not-allowed' : 'pointer',
+                    cursor:
+                      alreadySelected || beingSelected || isShuffling
+                        ? 'not-allowed'
+                        : 'pointer',
                     opacity: alreadySelected ? 0.5 : 1,
                   }}
                 >
@@ -535,6 +581,7 @@ Play now: https://the-perfect-season-v2.vercel.app`;
                     </p>
                   )}
 
+                  {beingSelected && <p className="small">Adding to roster...</p>}
                   {alreadySelected && <p className="small">Already selected</p>}
                 </button>
               );
@@ -548,23 +595,46 @@ Play now: https://the-perfect-season-v2.vercel.app`;
           userRoster={userRoster}
         />
 
-        <div className="card">
+        <div className="card roster-panel">
           <h2>Your Roster</h2>
 
-          <p className="small">
-            Roster: {filledSlots} / {totalSlots} filled
-          </p>
+          <div className="rating-strip">
+            <div>
+              <span>Roster</span>
+              <strong>
+                {filledSlots}/{totalSlots}
+              </strong>
+            </div>
 
-          <p className="small">Overall Rating: {currentRating}</p>
-          <p className="small">Offense Rating: {currentOffenseRating}</p>
-          <p className="small">Defense Rating: {currentDefenseRating}</p>
-          <p className="small">
-            Perfect Season Chance: {currentPerfectChance}%
-          </p>
+            <div>
+              <span>Overall</span>
+              <strong>{currentRating}</strong>
+            </div>
+
+            <div>
+              <span>Offense</span>
+              <strong>{currentOffenseRating}</strong>
+            </div>
+
+            <div>
+              <span>Defense</span>
+              <strong>{currentDefenseRating}</strong>
+            </div>
+
+            <div>
+              <span>Perfect</span>
+              <strong>{currentPerfectChance}%</strong>
+            </div>
+          </div>
 
           <div className="mode-list">
             {sport.roster.map((slot) => (
-              <div key={slot} className="card">
+              <div
+                key={slot}
+                className={`card roster-slot-card ${
+                  lastDraftedSlot === slot ? 'roster-slot-new' : ''
+                }`}
+              >
                 <strong>{slot}</strong>
 
                 <p className="small">
