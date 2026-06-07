@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { useParams } from 'next/navigation';
 import Nav from '../../../components/Nav';
+import SportSurface from '../../../components/SportSurface';
 import { getTeamColors } from '../../../lib/teamColors';
 import { getTeamWordmark } from '../../../lib/teamFonts';
 import {
@@ -102,9 +103,7 @@ function findOpenRosterSlot(
 }
 
 function calculateAverageRating(players: Player[]) {
-  if (players.length === 0) {
-    return 0;
-  }
+  if (players.length === 0) return 0;
 
   const total = players.reduce((sum, player) => sum + player.rating, 0);
   return Math.round(total / players.length);
@@ -249,6 +248,7 @@ export default function SportGame() {
 
   const [mode, setMode] = useState<'casual' | 'ultimate'>('casual');
   const [reSpins, setReSpins] = useState<number>(sport.reSpins);
+
   const [finalRecord, setFinalRecord] = useState<string | null>(null);
   const [finalRating, setFinalRating] = useState<number | null>(null);
   const [finalOffenseRating, setFinalOffenseRating] = useState<number | null>(
@@ -541,6 +541,12 @@ Play now: https://the-perfect-season-v2.vercel.app`;
             })}
           </div>
         </div>
+
+        <SportSurface
+          sportKey={sportKey}
+          roster={sport.roster}
+          userRoster={userRoster}
+        />
 
         <div className="card">
           <h2>Your Roster</h2>
