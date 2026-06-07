@@ -30,7 +30,7 @@ button {
   width: 100%;
   min-height: 100vh;
   padding: 28px;
-  background-color: #070b14;
+  background: #070b14;
 }
 
 .nav {
