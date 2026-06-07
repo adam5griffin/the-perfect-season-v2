@@ -5,7 +5,7 @@ body {
   background: #070707;
   color: white;
 }
-a { color: inherit; text-decoration: none; }
+a { color: inherit; text-decoration: 
 .page { min-height: 100vh; }
 .nav {
   display: flex;
@@ -91,4 +91,31 @@ th { color: #f5c542; }
   .hero, .grid, .game-shell { grid-template-columns: 1fr; }
   .nav { padding: 18px 5%; }
   .navlinks { gap: 10px; font-size: 12px; }
+}
+/* Homepage artwork */
+
+.hero-art-card {
+  padding: 0;
+  overflow: hidden;
+  background: transparent;
+  border: none;
+}
+
+.hero-art {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 24px;
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.45);
+}
+
+/* Mobile cleanup for homepage artwork */
+@media (max-width: 768px) {
+  .hero-art {
+    border-radius: 18px;
+  }
+
+  .hero-art-card {
+    margin-top: 20px;
+  }
 }
