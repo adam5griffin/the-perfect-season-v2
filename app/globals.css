@@ -1018,3 +1018,81 @@ button.card {
     width: 100%;
   }
 }
+/* Premium cartoon sports wordmark style */
+
+.team-wordmark {
+  display: block;
+  max-width: 100%;
+  font-size: clamp(30px, 4vw, 54px);
+  line-height: 0.92;
+  font-weight: 1000;
+  letter-spacing: -1px;
+  text-transform: uppercase;
+  color: var(--team-wordmark-main);
+  -webkit-text-stroke: 1.5px var(--team-wordmark-stroke);
+  text-shadow:
+    0 2px 0 var(--team-wordmark-shadow),
+    0 4px 0 rgba(0, 0, 0, 0.55),
+    0 12px 28px rgba(0, 0, 0, 0.55);
+  filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.45));
+}
+
+.team-wordmark-city {
+  display: block;
+  margin-bottom: 8px;
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  font-size: clamp(13px, 1.4vw, 18px);
+  line-height: 1;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.88);
+  -webkit-text-stroke: 0;
+  text-shadow: 0 3px 12px rgba(0, 0, 0, 0.55);
+}
+
+.team-wordmark-name {
+  display: block;
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+
+.team-wordmark.script .team-wordmark-name {
+  font-family: 'Brush Script MT', 'Lucida Handwriting', cursive;
+  text-transform: none;
+  font-style: italic;
+  letter-spacing: 0;
+}
+
+.team-wordmark.serif .team-wordmark-name {
+  font-family: Georgia, 'Times New Roman', serif;
+  letter-spacing: -1px;
+}
+
+.team-wordmark.block .team-wordmark-name {
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  letter-spacing: 1px;
+}
+
+.team-wordmark.modern .team-wordmark-name {
+  font-family: 'Arial Black', Impact, Arial, sans-serif;
+  letter-spacing: -1px;
+}
+
+.team-wordmark.arched {
+  transform: perspective(500px) rotateX(4deg);
+}
+
+.team-wordmark.italic {
+  transform: skewX(-8deg);
+}
+
+@media (max-width: 768px) {
+  .team-wordmark {
+    font-size: clamp(28px, 11vw, 42px);
+    -webkit-text-stroke: 1px var(--team-wordmark-stroke);
+  }
+
+  .team-wordmark-city {
+    font-size: 12px;
+    letter-spacing: 3px;
+  }
+}
