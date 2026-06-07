@@ -1190,3 +1190,506 @@ button.card {
     letter-spacing: 3px;
   }
 }
+/* Sport surface court / field / diamond */
+
+.surface-card {
+  grid-column: 1 / -1;
+  border-radius: 30px;
+  padding: 24px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.035));
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+}
+
+.surface-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  align-items: flex-end;
+  margin-bottom: 20px;
+}
+
+.surface-header h2 {
+  margin: 0;
+}
+
+.sport-surface {
+  position: relative;
+  min-height: 440px;
+  border-radius: 26px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow:
+    inset 0 0 80px rgba(0, 0, 0, 0.45),
+    0 20px 70px rgba(0, 0, 0, 0.35);
+}
+
+.surface-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.12), transparent 38%),
+    radial-gradient(circle at 20% 20%, rgba(245, 197, 66, 0.16), transparent 30%);
+  z-index: 1;
+}
+
+.nba-court {
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+    radial-gradient(circle at center, rgba(245, 197, 66, 0.12), transparent 38%),
+    linear-gradient(135deg, #8a4f20, #c4823f, #6d3917);
+  background-size: 42px 42px, 42px 42px, auto, auto;
+}
+
+.court-center-circle {
+  position: absolute;
+  width: 170px;
+  height: 170px;
+  border: 3px solid rgba(255, 255, 255, 0.35);
+  border-radius: 50%;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.court-key-left,
+.court-key-right {
+  position: absolute;
+  width: 115px;
+  height: 210px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.court-key-left {
+  left: 0;
+  border-left: none;
+}
+
+.court-key-right {
+  right: 0;
+  border-right: none;
+}
+
+.court-midline {
+  position: absolute;
+  width: 3px;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.24);
+  left: 50%;
+  top: 0;
+}
+
+.nfl-field {
+  background:
+    repeating-linear-gradient(
+      90deg,
+      #123f22 0,
+      #123f22 70px,
+      #17512b 70px,
+      #17512b 140px
+    );
+}
+
+.nfl-field::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(0deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+  background-size: 100% 55px;
+  opacity: 0.55;
+}
+
+.yard-line {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 2px;
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.yard-20 {
+  left: 20%;
+}
+
+.yard-40 {
+  left: 40%;
+}
+
+.yard-50 {
+  left: 50%;
+  background: rgba(245, 197, 66, 0.7);
+}
+
+.yard-60 {
+  left: 60%;
+}
+
+.yard-80 {
+  left: 80%;
+}
+
+.mlb-diamond {
+  background:
+    radial-gradient(circle at 50% 68%, #9c6a35 0, #9c6a35 28%, transparent 29%),
+    radial-gradient(circle at 50% 42%, #204f27 0, #204f27 55%, #123319 100%);
+}
+
+.diamond-infield {
+  position: absolute;
+  width: 230px;
+  height: 230px;
+  left: 50%;
+  top: 58%;
+  transform: translate(-50%, -50%) rotate(45deg);
+  background: rgba(154, 100, 48, 0.92);
+  border: 3px solid rgba(255, 255, 255, 0.45);
+}
+
+.base {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  background: #ffffff;
+  transform: rotate(45deg);
+  z-index: 2;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
+}
+
+.base-home {
+  left: 50%;
+  top: 78%;
+}
+
+.base-first {
+  left: 63%;
+  top: 58%;
+}
+
+.base-second {
+  left: 50%;
+  top: 38%;
+}
+
+.base-third {
+  left: 37%;
+  top: 58%;
+}
+
+.pitcher-mound {
+  position: absolute;
+  width: 58px;
+  height: 58px;
+  left: 50%;
+  top: 58%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: #b9874b;
+  border: 3px solid rgba(255, 255, 255, 0.35);
+  z-index: 2;
+}
+
+.surface-slot {
+  position: absolute;
+  z-index: 5;
+  width: 150px;
+  min-height: 82px;
+  padding: 12px;
+  border-radius: 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: rgba(5, 7, 12, 0.76);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow:
+    0 12px 35px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.09);
+  backdrop-filter: blur(10px);
+  transition:
+    transform 0.22s ease,
+    border-color 0.22s ease,
+    background 0.22s ease,
+    box-shadow 0.22s ease;
+}
+
+.surface-slot.empty {
+  border-style: dashed;
+  opacity: 0.82;
+}
+
+.surface-slot.filled {
+  border-color: rgba(245, 197, 66, 0.8);
+  background:
+    linear-gradient(180deg, rgba(245, 197, 66, 0.22), rgba(5, 7, 12, 0.82));
+  transform: scale(1.03);
+  animation: playerDropIn 0.32s ease;
+}
+
+.surface-slot-label {
+  font-size: 11px;
+  font-weight: 900;
+  color: #f5c542;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 6px;
+}
+
+.surface-slot strong {
+  font-size: 13px;
+  line-height: 1.15;
+}
+
+.surface-rating,
+.surface-empty {
+  margin-top: 5px;
+  font-size: 11px;
+  color: #cfd6e4;
+}
+
+/* NBA positioning */
+
+.nba-pg {
+  left: 12%;
+  top: 43%;
+}
+
+.nba-sg {
+  left: 30%;
+  top: 18%;
+}
+
+.nba-sf {
+  right: 30%;
+  top: 18%;
+}
+
+.nba-pf {
+  right: 12%;
+  top: 43%;
+}
+
+.nba-c {
+  left: 50%;
+  top: 48%;
+  transform: translateX(-50%);
+}
+
+.nba-6th-man {
+  left: 50%;
+  bottom: 8%;
+  transform: translateX(-50%);
+}
+
+/* NFL positioning */
+
+.nfl-qb {
+  left: 43%;
+  top: 47%;
+}
+
+.nfl-rb {
+  left: 30%;
+  top: 58%;
+}
+
+.nfl-wr1 {
+  left: 8%;
+  top: 18%;
+}
+
+.nfl-wr2 {
+  right: 8%;
+  top: 18%;
+}
+
+.nfl-te {
+  right: 28%;
+  top: 36%;
+}
+
+.nfl-flex {
+  left: 12%;
+  bottom: 12%;
+}
+
+.nfl-offensive-line {
+  left: 42%;
+  top: 30%;
+}
+
+.nfl-team-defense {
+  right: 10%;
+  bottom: 12%;
+}
+
+/* MLB positioning */
+
+.mlb-c {
+  left: 50%;
+  top: 82%;
+  transform: translateX(-50%);
+}
+
+.mlb-1b {
+  right: 14%;
+  top: 56%;
+}
+
+.mlb-2b {
+  right: 32%;
+  top: 35%;
+}
+
+.mlb-3b {
+  left: 14%;
+  top: 56%;
+}
+
+.mlb-ss {
+  left: 32%;
+  top: 35%;
+}
+
+.mlb-lf {
+  left: 12%;
+  top: 14%;
+}
+
+.mlb-cf {
+  left: 50%;
+  top: 8%;
+  transform: translateX(-50%);
+}
+
+.mlb-rf {
+  right: 12%;
+  top: 14%;
+}
+
+.mlb-dh {
+  left: 50%;
+  bottom: 4%;
+  transform: translateX(-50%);
+}
+
+.mlb-sp1 {
+  left: 43%;
+  top: 48%;
+}
+
+.mlb-sp2 {
+  left: 4%;
+  bottom: 4%;
+}
+
+.mlb-sp3 {
+  right: 4%;
+  bottom: 4%;
+}
+
+.mlb-sp4 {
+  left: 4%;
+  top: 40%;
+}
+
+.mlb-sp5 {
+  right: 4%;
+  top: 40%;
+}
+
+.mlb-bullpen {
+  right: 4%;
+  bottom: 24%;
+}
+
+@keyframes playerDropIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.94);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1.03);
+  }
+}
+
+@media (max-width: 980px) {
+  .surface-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .sport-surface {
+    min-height: 760px;
+  }
+
+  .surface-slot {
+    width: 135px;
+  }
+
+  .nba-pg,
+  .nba-sg,
+  .nba-sf,
+  .nba-pf,
+  .nba-c,
+  .nba-6th-man,
+  .nfl-qb,
+  .nfl-rb,
+  .nfl-wr1,
+  .nfl-wr2,
+  .nfl-te,
+  .nfl-flex,
+  .nfl-offensive-line,
+  .nfl-team-defense,
+  .mlb-c,
+  .mlb-1b,
+  .mlb-2b,
+  .mlb-3b,
+  .mlb-ss,
+  .mlb-lf,
+  .mlb-cf,
+  .mlb-rf,
+  .mlb-dh,
+  .mlb-sp1,
+  .mlb-sp2,
+  .mlb-sp3,
+  .mlb-sp4,
+  .mlb-sp5,
+  .mlb-bullpen {
+    transform: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .surface-card {
+    padding: 16px;
+    border-radius: 22px;
+  }
+
+  .sport-surface {
+    min-height: 860px;
+    border-radius: 20px;
+  }
+
+  .surface-slot {
+    width: calc(50% - 18px);
+    min-height: 78px;
+  }
+
+  .surface-slot:nth-of-type(odd) {
+    left: 12px !important;
+    right: auto !important;
+  }
+
+  .surface-slot:nth-of-type(even) {
+    right: 12px !important;
+    left: auto !important;
+  }
+}
