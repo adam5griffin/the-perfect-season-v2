@@ -1,54 +1,74 @@
 import Link from 'next/link';
-import Nav from '../../components/Nav';
+import Nav from '../components/Nav';
 
-export default function Play() {
+export default function Home() {
   return (
     <main className="page">
       <Nav />
 
-      <section className="section">
-        <h1>Choose Your Perfect Season</h1>
-        <p className="subtitle">
-          Pick a league, draw a random team from a specific season, choose players from that exact roster, and chase the perfect record.
-        </p>
+      <section className="hero">
+        <div>
+          <div className="eyebrow">NBA • NFL • MLB</div>
+
+          <h1>Can you build The Perfect Season?</h1>
+
+          <p className="subtitle">
+            Draw players from specific team seasons, build an all-time roster,
+            and simulate your way toward 82-0, 17-0, or 162-0.
+          </p>
+
+          <div className="buttons">
+            <Link className="btn" href="/play">
+              Play Free
+            </Link>
+
+            <Link className="btn secondary" href="/pricing">
+              View Pro Mode
+            </Link>
+          </div>
+        </div>
+
+        <div className="card">
+          <span className="pill">Ultimate Mode</span>
+
+          <h2>No re-spins. No excuses.</h2>
+
+          <p className="muted">
+            Every team-season draw is final. Build the best roster possible
+            and compete for leaderboard immortality.
+          </p>
+
+          <div className="stat">0</div>
+
+          <p className="small">Re-spins allowed in Ultimate Mode</p>
+        </div>
       </section>
 
       <section className="grid">
-        <Link className="card" href="/play/nba">
-          <div className="stat">🏀</div>
-          <h2>NBA 82-0</h2>
-          <p className="muted">
-            Draw specific NBA team seasons like 1996 Chicago Bulls or 2001 Los Angeles Lakers.
-            Casual mode gives you 3 re-spins.
-          </p>
-        </Link>
-
-        <Link className="card" href="/play/nfl">
-          <div className="stat">🏈</div>
-          <h2>NFL 17-0</h2>
-          <p className="muted">
-            Draw specific NFL team seasons and build your offense. Add a Team Defense from a specific year.
-            Casual mode gives you 6 re-spins.
-          </p>
-        </Link>
-
-        <Link className="card" href="/play/mlb">
-          <div className="stat">⚾</div>
-          <h2>MLB 162-0</h2>
-          <p className="muted">
-            Draw specific MLB team seasons and build a full lineup, rotation, and bullpen.
-            Casual mode gives you 5 re-spins.
-          </p>
-        </Link>
-      </section>
-
-      <section className="section">
         <div className="card">
-          <span className="pill">Ultimate Mode</span>
-          <h2>No Re-Spins. Every Draw Counts.</h2>
+          <div className="stat">82-0</div>
+          <h3>NBA Season</h3>
           <p className="muted">
-            Ultimate Mode removes all re-spins. Every team season you draw is final.
-            This is where leaderboard teams are ranked.
+            Build a 6-man NBA roster from specific team seasons with 3 re-spins
+            in casual mode.
+          </p>
+        </div>
+
+        <div className="card">
+          <div className="stat">17-0</div>
+          <h3>NFL Season</h3>
+          <p className="muted">
+            Draft offense plus a Team Defense from a specific season with 6
+            re-spins in casual mode.
+          </p>
+        </div>
+
+        <div className="card">
+          <div className="stat">162-0</div>
+          <h3>MLB Season</h3>
+          <p className="muted">
+            Build a lineup, rotation, and bullpen from specific team seasons
+            with 5 re-spins in casual mode.
           </p>
         </div>
       </section>
