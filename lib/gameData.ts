@@ -63,160 +63,270 @@ export const sports = {
   },
 } as const;
 
-export const seasonDatabase: SeasonTeam[] = [
-  {
-    id: 'nba-1996-chicago-bulls',
-    sport: 'nba',
-    year: 1996,
-    team: 'Chicago Bulls',
-    displayName: '1996 Chicago Bulls',
-    players: [
-      {
-        name: 'Michael Jordan',
-        position: 'SG',
-        stats: { ppg: 30.4, rpg: 6.6, apg: 4.3 },
-      },
-      {
-        name: 'Scottie Pippen',
-        position: 'SF',
-        stats: { ppg: 19.4, rpg: 6.4, apg: 5.9 },
-      },
-      {
-        name: 'Dennis Rodman',
-        position: 'PF',
-        stats: { rpg: 14.9 },
-      },
-    ],
-  },
+const YEARS_2000_TO_2026 = Array.from(
+  { length: 2026 - 2000 + 1 },
+  (_, index) => 2000 + index
+);
 
-  {
-    id: 'nba-2001-los-angeles-lakers',
-    sport: 'nba',
-    year: 2001,
-    team: 'Los Angeles Lakers',
-    displayName: '2001 Los Angeles Lakers',
-    players: [
+const nbaTeams = [
+  'Atlanta Hawks',
+  'Boston Celtics',
+  'Brooklyn Nets',
+  'Charlotte Hornets',
+  'Chicago Bulls',
+  'Cleveland Cavaliers',
+  'Dallas Mavericks',
+  'Denver Nuggets',
+  'Detroit Pistons',
+  'Golden State Warriors',
+  'Houston Rockets',
+  'Indiana Pacers',
+  'Los Angeles Clippers',
+  'Los Angeles Lakers',
+  'Memphis Grizzlies',
+  'Miami Heat',
+  'Milwaukee Bucks',
+  'Minnesota Timberwolves',
+  'New Orleans Pelicans',
+  'New York Knicks',
+  'Oklahoma City Thunder',
+  'Orlando Magic',
+  'Philadelphia 76ers',
+  'Phoenix Suns',
+  'Portland Trail Blazers',
+  'Sacramento Kings',
+  'San Antonio Spurs',
+  'Toronto Raptors',
+  'Utah Jazz',
+  'Washington Wizards',
+];
+
+const nflTeams = [
+  'Arizona Cardinals',
+  'Atlanta Falcons',
+  'Baltimore Ravens',
+  'Buffalo Bills',
+  'Carolina Panthers',
+  'Chicago Bears',
+  'Cincinnati Bengals',
+  'Cleveland Browns',
+  'Dallas Cowboys',
+  'Denver Broncos',
+  'Detroit Lions',
+  'Green Bay Packers',
+  'Houston Texans',
+  'Indianapolis Colts',
+  'Jacksonville Jaguars',
+  'Kansas City Chiefs',
+  'Las Vegas Raiders',
+  'Los Angeles Chargers',
+  'Los Angeles Rams',
+  'Miami Dolphins',
+  'Minnesota Vikings',
+  'New England Patriots',
+  'New Orleans Saints',
+  'New York Giants',
+  'New York Jets',
+  'Philadelphia Eagles',
+  'Pittsburgh Steelers',
+  'San Francisco 49ers',
+  'Seattle Seahawks',
+  'Tampa Bay Buccaneers',
+  'Tennessee Titans',
+  'Washington Commanders',
+];
+
+const mlbTeams = [
+  'Arizona Diamondbacks',
+  'Atlanta Braves',
+  'Baltimore Orioles',
+  'Boston Red Sox',
+  'Chicago Cubs',
+  'Chicago White Sox',
+  'Cincinnati Reds',
+  'Cleveland Guardians',
+  'Colorado Rockies',
+  'Detroit Tigers',
+  'Houston Astros',
+  'Kansas City Royals',
+  'Los Angeles Angels',
+  'Los Angeles Dodgers',
+  'Miami Marlins',
+  'Milwaukee Brewers',
+  'Minnesota Twins',
+  'New York Mets',
+  'New York Yankees',
+  'Oakland Athletics',
+  'Philadelphia Phillies',
+  'Pittsburgh Pirates',
+  'San Diego Padres',
+  'San Francisco Giants',
+  'Seattle Mariners',
+  'St. Louis Cardinals',
+  'Tampa Bay Rays',
+  'Texas Rangers',
+  'Toronto Blue Jays',
+  'Washington Nationals',
+];
+
+function slugify(value: string) {
+  return value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
+}
+
+function createPlaceholderPlayers(
+  sport: SportKey,
+  team: string,
+  year: number
+): Player[] {
+  if (sport === 'nba') {
+    return [
       {
-        name: "Shaquille O'Neal",
-        position: 'C',
-        stats: { ppg: 28.7, rpg: 12.7, apg: 3.7 },
-      },
-      {
-        name: 'Kobe Bryant',
-        position: 'SG',
-        stats: { ppg: 28.5, rpg: 5.9, apg: 5.0 },
-      },
-      {
-        name: 'Derek Fisher',
+        name: `${year} ${team} Point Guard`,
         position: 'PG',
       },
-    ],
-  },
-
-  {
-    id: 'nfl-1993-dallas-cowboys',
-    sport: 'nfl',
-    year: 1993,
-    team: 'Dallas Cowboys',
-    displayName: '1993 Dallas Cowboys',
-    players: [
       {
-        name: 'Troy Aikman',
+        name: `${year} ${team} Shooting Guard`,
+        position: 'SG',
+      },
+      {
+        name: `${year} ${team} Small Forward`,
+        position: 'SF',
+      },
+      {
+        name: `${year} ${team} Power Forward`,
+        position: 'PF',
+      },
+      {
+        name: `${year} ${team} Center`,
+        position: 'C',
+      },
+      {
+        name: `${year} ${team} Sixth Man`,
+        position: '6th Man',
+      },
+    ];
+  }
+
+  if (sport === 'nfl') {
+    return [
+      {
+        name: `${year} ${team} Quarterback`,
         position: 'QB',
       },
       {
-        name: 'Emmitt Smith',
+        name: `${year} ${team} Running Back`,
         position: 'RB',
       },
       {
-        name: 'Michael Irvin',
+        name: `${year} ${team} Wide Receiver 1`,
         position: 'WR',
       },
       {
-        name: '1993 Cowboys Offensive Line',
-        position: 'OL',
+        name: `${year} ${team} Wide Receiver 2`,
+        position: 'WR',
       },
       {
-        name: '1993 Cowboys Team Defense',
-        position: 'DEF',
-      },
-    ],
-  },
-
-  {
-    id: 'nfl-2000-baltimore-ravens',
-    sport: 'nfl',
-    year: 2000,
-    team: 'Baltimore Ravens',
-    displayName: '2000 Baltimore Ravens',
-    players: [
-      {
-        name: 'Jamal Lewis',
-        position: 'RB',
-      },
-      {
-        name: 'Shannon Sharpe',
+        name: `${year} ${team} Tight End`,
         position: 'TE',
       },
       {
-        name: '2000 Ravens Team Defense',
+        name: `${year} ${team} Offensive Line`,
+        position: 'OL',
+      },
+      {
+        name: `${year} ${team} Team Defense`,
         position: 'DEF',
-        stats: { pointsAllowed: 165, takeaways: 49 },
       },
-    ],
-  },
+    ];
+  }
 
-  {
-    id: 'mlb-1998-new-york-yankees',
-    sport: 'mlb',
-    year: 1998,
-    team: 'New York Yankees',
-    displayName: '1998 New York Yankees',
-    players: [
-      {
-        name: 'Derek Jeter',
-        position: 'SS',
-      },
-      {
-        name: 'Bernie Williams',
-        position: 'CF',
-      },
-      {
-        name: 'Mariano Rivera',
-        position: 'RP',
-      },
-      {
-        name: '1998 Yankees Bullpen',
-        position: 'Bullpen',
-      },
-    ],
-  },
+  return [
+    {
+      name: `${year} ${team} Catcher`,
+      position: 'C',
+    },
+    {
+      name: `${year} ${team} First Baseman`,
+      position: '1B',
+    },
+    {
+      name: `${year} ${team} Second Baseman`,
+      position: '2B',
+    },
+    {
+      name: `${year} ${team} Third Baseman`,
+      position: '3B',
+    },
+    {
+      name: `${year} ${team} Shortstop`,
+      position: 'SS',
+    },
+    {
+      name: `${year} ${team} Left Fielder`,
+      position: 'LF',
+    },
+    {
+      name: `${year} ${team} Center Fielder`,
+      position: 'CF',
+    },
+    {
+      name: `${year} ${team} Right Fielder`,
+      position: 'RF',
+    },
+    {
+      name: `${year} ${team} Designated Hitter`,
+      position: 'DH',
+    },
+    {
+      name: `${year} ${team} Starting Pitcher 1`,
+      position: 'SP',
+    },
+    {
+      name: `${year} ${team} Starting Pitcher 2`,
+      position: 'SP',
+    },
+    {
+      name: `${year} ${team} Starting Pitcher 3`,
+      position: 'SP',
+    },
+    {
+      name: `${year} ${team} Starting Pitcher 4`,
+      position: 'SP',
+    },
+    {
+      name: `${year} ${team} Starting Pitcher 5`,
+      position: 'SP',
+    },
+    {
+      name: `${year} ${team} Bullpen`,
+      position: 'Bullpen',
+    },
+  ];
+}
 
-  {
-    id: 'mlb-2025-los-angeles-dodgers',
-    sport: 'mlb',
-    year: 2025,
-    team: 'Los Angeles Dodgers',
-    displayName: '2025 Los Angeles Dodgers',
-    players: [
-      {
-        name: 'Shohei Ohtani',
-        position: 'DH',
-      },
-      {
-        name: 'Mookie Betts',
-        position: 'RF',
-      },
-      {
-        name: 'Freddie Freeman',
-        position: '1B',
-      },
-      {
-        name: '2025 Dodgers Bullpen',
-        position: 'Bullpen',
-      },
-    ],
-  },
+function generateLeagueSeasons(
+  sport: SportKey,
+  teams: string[]
+): SeasonTeam[] {
+  return teams.flatMap((team) =>
+    YEARS_2000_TO_2026.map((year) => ({
+      id: `${sport}-${year}-${slugify(team)}`,
+      sport,
+      year,
+      team,
+      displayName: `${year} ${team}`,
+      players: createPlaceholderPlayers(sport, team, year),
+    }))
+  );
+}
+
+export const seasonDatabase: SeasonTeam[] = [
+  ...generateLeagueSeasons('nba', nbaTeams),
+  ...generateLeagueSeasons('nfl', nflTeams),
+  ...generateLeagueSeasons('mlb', mlbTeams),
 ];
 
 export function getSeasonsBySport(sport: SportKey): SeasonTeam[] {
@@ -242,4 +352,8 @@ export function getRandomSeasonByTeam(
   }
 
   return seasons[Math.floor(Math.random() * seasons.length)];
+}
+
+export function getSeasonCountBySport(sport: SportKey): number {
+  return getSeasonsBySport(sport).length;
 }
