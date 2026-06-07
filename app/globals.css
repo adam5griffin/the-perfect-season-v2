@@ -648,3 +648,172 @@ a {
     font-size: 54px;
   }
 }
+/* Clean game page redesign */
+
+.game-shell {
+  display: grid;
+  grid-template-columns: 360px 1fr 420px;
+  gap: 22px;
+  align-items: start;
+  margin-top: 28px;
+}
+
+.draw-box {
+  position: sticky;
+  top: 24px;
+  min-height: 360px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-radius: 30px;
+  padding: 28px;
+  overflow: hidden;
+}
+
+.draw-box .eyebrow {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.draw {
+  font-size: clamp(40px, 5vw, 68px);
+  line-height: 0.9;
+  font-weight: 1000;
+  letter-spacing: -3px;
+  text-transform: uppercase;
+  margin: 22px 0;
+  text-shadow: 0 12px 45px rgba(0, 0, 0, 0.45);
+}
+
+.game-shell > .card {
+  border-radius: 30px;
+  background: rgba(255, 255, 255, 0.055);
+  border: 1px solid rgba(255, 255, 255, 0.11);
+}
+
+.game-shell h2 {
+  font-size: 28px;
+  margin-bottom: 18px;
+}
+
+.mode-list {
+  display: grid;
+  gap: 12px;
+}
+
+.mode-list .card,
+.mode-list button.card {
+  border-radius: 18px;
+  padding: 18px;
+  background: rgba(255, 255, 255, 0.075);
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  box-shadow: none;
+}
+
+.mode-list button.card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(245, 197, 66, 0.5);
+  background: rgba(255, 255, 255, 0.11);
+}
+
+.game-shell strong {
+  font-size: 16px;
+}
+
+.game-shell .small {
+  margin: 6px 0 0;
+}
+
+.game-shell .buttons {
+  gap: 10px;
+}
+
+.game-shell .btn {
+  min-height: 42px;
+}
+
+.section {
+  max-width: 1150px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.section h1 {
+  max-width: 900px;
+}
+
+.section .subtitle {
+  max-width: 760px;
+}
+
+/* Roster panel should feel like a scoreboard */
+
+.game-shell > .card:last-child {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.035));
+}
+
+.game-shell > .card:last-child > p.small {
+  display: inline-flex;
+  margin: 4px 6px 8px 0;
+  padding: 8px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.075);
+  border: 1px solid rgba(255, 255, 255, 0.11);
+}
+
+/* Make player buttons look cleaner */
+
+button.card {
+  text-align: left;
+  color: #ffffff;
+  cursor: pointer;
+  transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+}
+
+/* Make the page less cramped */
+
+.page {
+  padding: 32px;
+}
+
+/* Mobile game layout */
+
+@media (max-width: 1180px) {
+  .game-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .draw-box {
+    position: static;
+    min-height: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .page {
+    padding: 18px;
+  }
+
+  .draw {
+    font-size: 40px;
+    letter-spacing: -2px;
+  }
+
+  .game-shell {
+    gap: 16px;
+  }
+
+  .draw-box,
+  .game-shell > .card {
+    border-radius: 22px;
+    padding: 20px;
+  }
+
+  .game-shell .buttons {
+    width: 100%;
+  }
+
+  .game-shell .btn {
+    width: 100%;
+  }
+}
