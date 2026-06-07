@@ -2,17 +2,19 @@
   box-sizing: border-box;
 }
 
-html,
-body {
+html {
   margin: 0;
   padding: 0;
   background: #070b14;
-  color: #ffffff;
-  font-family: Arial, Helvetica, sans-serif;
 }
 
 body {
+  margin: 0;
+  padding: 0;
   min-height: 100vh;
+  background: #070b14;
+  color: #ffffff;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 a {
@@ -21,16 +23,14 @@ a {
 }
 
 button {
-  font-family: inherit;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 .page {
   width: 100%;
   min-height: 100vh;
   padding: 28px;
-  background: radial-gradient(circle at top left, rgba(0, 102, 255, 0.2), transparent 35%),
-    radial-gradient(circle at bottom right, rgba(255, 196, 0, 0.15), transparent 30%),
-    #070b14;
+  background-color: #070b14;
 }
 
 .nav {
@@ -58,6 +58,10 @@ button {
   font-size: 14px;
 }
 
+.nav-links a:hover {
+  color: #ffffff;
+}
+
 .hero {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -80,7 +84,7 @@ button {
 }
 
 h1 {
-  font-size: clamp(42px, 7vw, 88px);
+  font-size: 64px;
   line-height: 0.95;
   margin: 0 0 22px;
   letter-spacing: -3px;
@@ -199,7 +203,7 @@ h3 {
 }
 
 .draw {
-  font-size: clamp(34px, 5vw, 58px);
+  font-size: 48px;
   line-height: 0.95;
   font-weight: 900;
   letter-spacing: -2px;
@@ -269,6 +273,11 @@ button.card {
 
   .nav-links {
     flex-wrap: wrap;
+  }
+
+  h1 {
+    font-size: 44px;
+    letter-spacing: -2px;
   }
 
   .subtitle {
