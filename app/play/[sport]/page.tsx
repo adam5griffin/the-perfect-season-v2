@@ -95,21 +95,112 @@ function findOpenRosterSlot(
   return firstOpenSlot || null;
 }
 
-function calculateRosterRating(roster: Record<string, Player | null>) {
-  const players = Object.values(roster).filter(Boolean) as Player[];
-
+function calculateAverageRating(players: Player[]) {
   if (players.length === 0) {
     return 0;
   }
 
-  const totalRating = players.reduce((sum, player) => sum + player.rating, 0);
-  return Math.round(totalRating / players.length);
+  const total = players.reduce((sum, player) => sum + player.rating, 0);
+  return Math.round(total / players.length);
 }
 
-function calculateSeasonResult(sportKey: SportKey, rosterRating: number) {
+function calculateRosterRating(roster: Record<string, Player | null>) {
+  const players = Object.values(roster).filter(Boolean) as Player[];
+  return calculateAverageRating(players);
+}
+
+function calculateOffenseRating(
+  sportKey: SportKey,
+  roster: Record<string, Player | null>
+) {
+  let offenseSlots: string[] = [];
+
+  if (sportKey === 'nba') {
+    offenseSlots = ['PG', 'SG', 'SF', 'PF', 'C', '6th Man'];
+  }
+
+  if (sportKey === 'nfl') {
+    offenseSlots = ['QB', 'RB', 'WR1', 'WR2', 'TE', 'FLEX', 'Offensive Line'];
+  }
+
+  if (sportKey === 'mlb') {
+    offenseSlots = ['C', '1B', '2B', '3B', 'SS', 'LF', 'CF', 'RF', 'DH'];
+  }
+
+  const players = offenseSlots
+    .map((slot) => roster[slot])
+    .filter(Boolean) as Player[];
+
+  return calculateAverageRating(players);
+}
+
+function calculateDefenseRating(
+  sportKey: SportKey,
+  roster: Record<string, Player | null>
+) {
+  let defenseSlots: string[] = [];
+
+  if (sportKey === 'nba') {
+    defenseSlots = ['C', 'PF', 'SF'];
+  }
+
+  if (sportKey === 'nfl') {
+    defenseSlots = ['Team Defense'];
+  }
+
+  if (sportKey === 'mlb') {
+    defenseSlots = ['SP1', 'SP2', 'SP3', 'SP4', 'SP5', 'Bullpen'];
+  }
+
+  const players = defenseSlots
+    .map((slot) => roster[slot])
+    .filter(Boolean) as Player[];
+
+  return calculateAverageRating(players);
+}
+
+function calculatePerfectSeasonChance(
+  sportKey: SportKey,
+  overallRating: number,
+  offenseRating: number,
+  defenseRating: number
+) {
+  const balanceBonus = Math.max(
+    0,
+    10 - Math.abs(offenseRating - defenseRating)
+  );
+
+  const baseChance = overallRating - 70 + balanceBonus;
+
+  if (sportKey === 'nfl') {
+    return Math.min(99, Math.max(1, Math.round(baseChance * 2.2)));
+  }
+
+  if (sportKey === 'nba') {
+    return Math.min(99, Math.max(1, Math.round(baseChance * 1.5)));
+  }
+
+  return Math.min(99, Math.max(1, Math.round(baseChance * 0.9)));
+}
+
+function calculateSeasonResult(
+  sportKey: SportKey,
+  overallRating: number,
+  offenseRating: number,
+  defenseRating: number
+) {
   const games = sportKey === 'nba' ? 82 : sportKey === 'nfl' ? 17 : 162;
 
-  const ratingGap = Math.max(0, 100 - rosterRating);
+  const perfectChance = calculatePerfectSeasonChance(
+    sportKey,
+    overallRating,
+    offenseRating,
+    defenseRating
+  );
+
+  const ratingGap = Math.max(0, 100 - overallRating);
+  const balancePenalty = Math.floor(Math.abs(offenseRating - defenseRating) / 6);
+
   const baseLosses =
     sportKey === 'nba'
       ? Math.round(ratingGap / 4)
@@ -118,13 +209,18 @@ function calculateSeasonResult(sportKey: SportKey, rosterRating: number) {
       : Math.round(ratingGap / 2);
 
   const randomness = Math.floor(Math.random() * 4);
-  const losses = Math.min(games, Math.max(0, baseLosses + randomness));
+  const losses = Math.min(
+    games,
+    Math.max(0, baseLosses + balancePenalty + randomness)
+  );
+
   const wins = games - losses;
 
   return {
     wins,
     losses,
     record: `${wins}-${losses}`,
+    perfectChance,
   };
 }
 
@@ -145,6 +241,15 @@ export default function SportGame() {
   const [reSpins, setReSpins] = useState<number>(sport.reSpins);
   const [finalRecord, setFinalRecord] = useState<string | null>(null);
   const [finalRating, setFinalRating] = useState<number | null>(null);
+  const [finalOffenseRating, setFinalOffenseRating] = useState<number | null>(
+    null
+  );
+  const [finalDefenseRating, setFinalDefenseRating] = useState<number | null>(
+    null
+  );
+  const [perfectSeasonChance, setPerfectSeasonChance] = useState<number | null>(
+    null
+  );
 
   const [userRoster, setUserRoster] = useState<Record<string, Player | null>>(
     () => createEmptyRoster(sport.roster)
@@ -154,17 +259,33 @@ export default function SportGame() {
   const filledSlots = sport.roster.filter((slot) => userRoster[slot]).length;
   const totalSlots = sport.roster.length;
   const rosterIsFull = filledSlots === totalSlots;
+
   const currentRating = calculateRosterRating(userRoster);
+  const currentOffenseRating = calculateOffenseRating(sportKey, userRoster);
+  const currentDefenseRating = calculateDefenseRating(sportKey, userRoster);
+  const currentPerfectChance = calculatePerfectSeasonChance(
+    sportKey,
+    currentRating,
+    currentOffenseRating,
+    currentDefenseRating
+  );
 
   function resetRoster() {
     setUserRoster(createEmptyRoster(sport.roster));
   }
 
+  function clearResults() {
+    setFinalRecord(null);
+    setFinalRating(null);
+    setFinalOffenseRating(null);
+    setFinalDefenseRating(null);
+    setPerfectSeasonChance(null);
+  }
+
   function resetGame(nextMode = mode) {
     setSelectedSeason(getRandomSeason(sportKey));
     setReSpins(nextMode === 'ultimate' ? 0 : sport.reSpins);
-    setFinalRecord(null);
-    setFinalRating(null);
+    clearResults();
     resetRoster();
   }
 
@@ -173,8 +294,7 @@ export default function SportGame() {
 
     setSelectedSeason(getRandomSeason(sportKey));
     setReSpins((current) => Math.max(current - 1, 0));
-    setFinalRecord(null);
-    setFinalRating(null);
+    clearResults();
   }
 
   function reSpinYear() {
@@ -182,8 +302,7 @@ export default function SportGame() {
 
     setSelectedSeason(getRandomSeasonByTeam(sportKey, selectedSeason.team));
     setReSpins((current) => Math.max(current - 1, 0));
-    setFinalRecord(null);
-    setFinalRating(null);
+    clearResults();
   }
 
   function playerAlreadySelected(player: Player) {
@@ -211,8 +330,7 @@ export default function SportGame() {
     }));
 
     setSelectedSeason(getRandomSeason(sportKey));
-    setFinalRecord(null);
-    setFinalRating(null);
+    clearResults();
   }
 
   function removePlayer(slot: string) {
@@ -221,18 +339,27 @@ export default function SportGame() {
       [slot]: null,
     }));
 
-    setFinalRecord(null);
-    setFinalRating(null);
+    clearResults();
   }
 
   function simulateSeason() {
     if (!rosterIsFull) return;
 
     const rosterRating = calculateRosterRating(userRoster);
-    const result = calculateSeasonResult(sportKey, rosterRating);
+    const offenseRating = calculateOffenseRating(sportKey, userRoster);
+    const defenseRating = calculateDefenseRating(sportKey, userRoster);
+    const result = calculateSeasonResult(
+      sportKey,
+      rosterRating,
+      offenseRating,
+      defenseRating
+    );
 
     setFinalRecord(result.record);
     setFinalRating(rosterRating);
+    setFinalOffenseRating(offenseRating);
+    setFinalDefenseRating(defenseRating);
+    setPerfectSeasonChance(result.perfectChance);
   }
 
   function copyShareText() {
@@ -243,7 +370,10 @@ export default function SportGame() {
     const shareText = `THE PERFECT SEASON
 ${sport.name} ${mode === 'ultimate' ? 'Ultimate Mode' : 'Casual Mode'}
 Final Record: ${finalRecord}
-Team Rating: ${finalRating}
+Overall Rating: ${finalRating}
+Offense Rating: ${finalOffenseRating}
+Defense Rating: ${finalDefenseRating}
+Perfect Season Chance: ${perfectSeasonChance}%
 
 ${rosterText}
 
@@ -301,7 +431,8 @@ Play now: https://the-perfect-season-v2.vercel.app`;
           <div className="draw">{selectedSeason.displayName}</div>
 
           <p className="muted">
-            Choose one player from the {selectedSeason.displayName} roster.
+            Pick {filledSlots + 1} of {totalSlots}. Choose one player from the{' '}
+            {selectedSeason.displayName} roster.
           </p>
 
           <div className="buttons">
@@ -368,7 +499,12 @@ Play now: https://the-perfect-season-v2.vercel.app`;
             Roster: {filledSlots} / {totalSlots} filled
           </p>
 
-          <p className="small">Current Team Rating: {currentRating}</p>
+          <p className="small">Overall Rating: {currentRating}</p>
+          <p className="small">Offense Rating: {currentOffenseRating}</p>
+          <p className="small">Defense Rating: {currentDefenseRating}</p>
+          <p className="small">
+            Perfect Season Chance: {currentPerfectChance}%
+          </p>
 
           <div className="mode-list">
             {sport.roster.map((slot) => (
@@ -411,11 +547,20 @@ Play now: https://the-perfect-season-v2.vercel.app`;
             <div className="card">
               <span className="pill">Share Card</span>
               <h2>THE PERFECT SEASON</h2>
+
               <p className="muted">
-                {sport.name} {mode === 'ultimate' ? 'Ultimate Mode' : 'Casual Mode'}
+                {sport.name}{' '}
+                {mode === 'ultimate' ? 'Ultimate Mode' : 'Casual Mode'}
               </p>
+
               <div className="stat">{finalRecord}</div>
-              <p className="small">Final Team Rating: {finalRating}</p>
+
+              <p className="small">Overall Rating: {finalRating}</p>
+              <p className="small">Offense Rating: {finalOffenseRating}</p>
+              <p className="small">Defense Rating: {finalDefenseRating}</p>
+              <p className="small">
+                Perfect Season Chance: {perfectSeasonChance}%
+              </p>
 
               <div className="mode-list">
                 {sport.roster.map((slot) => (
