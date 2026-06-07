@@ -9,6 +9,8 @@ import {
   SportKey,
   getRandomSeason,
   getRandomSeasonByTeam,
+  getRandomFeaturedSeason,
+  getRandomFeaturedSeasonByTeam,
   SeasonTeam,
   Player,
 } from '../../../lib/gameData';
@@ -97,10 +99,7 @@ function findOpenRosterSlot(
 }
 
 function calculateAverageRating(players: Player[]) {
-  if (players.length === 0) {
-    return 0;
-  }
-
+  if (players.length === 0) return 0;
   const total = players.reduce((sum, player) => sum + player.rating, 0);
   return Math.round(total / players.length);
 }
@@ -116,17 +115,9 @@ function calculateOffenseRating(
 ) {
   let offenseSlots: string[] = [];
 
-  if (sportKey === 'nba') {
-    offenseSlots = ['PG', 'SG', 'SF', 'PF', 'C', '6th Man'];
-  }
-
-  if (sportKey === 'nfl') {
-    offenseSlots = ['QB', 'RB', 'WR1', 'WR2', 'TE', 'FLEX', 'Offensive Line'];
-  }
-
-  if (sportKey === 'mlb') {
-    offenseSlots = ['C', '1B', '2B', '3B', 'SS', 'LF', 'CF', 'RF', 'DH'];
-  }
+  if (sportKey === 'nba') offenseSlots = ['PG', 'SG', 'SF', 'PF', 'C', '6th Man'];
+  if (sportKey === 'nfl') offenseSlots = ['QB', 'RB', 'WR1', 'WR2', 'TE', 'FLEX', 'Offensive Line'];
+  if (sportKey === 'mlb') offenseSlots = ['C', '1B', '2B', '3B', 'SS', 'LF', 'CF', 'RF', 'DH'];
 
   const players = offenseSlots
     .map((slot) => roster[slot])
@@ -141,17 +132,9 @@ function calculateDefenseRating(
 ) {
   let defenseSlots: string[] = [];
 
-  if (sportKey === 'nba') {
-    defenseSlots = ['C', 'PF', 'SF'];
-  }
-
-  if (sportKey === 'nfl') {
-    defenseSlots = ['Team Defense'];
-  }
-
-  if (sportKey === 'mlb') {
-    defenseSlots = ['SP1', 'SP2', 'SP3', 'SP4', 'SP5', 'Bullpen'];
-  }
+  if (sportKey === 'nba') defenseSlots = ['C', 'PF', 'SF'];
+  if (sportKey === 'nfl') defenseSlots = ['Team Defense'];
+  if (sportKey === 'mlb') defenseSlots = ['SP1', 'SP2', 'SP3', 'SP4', 'SP5', 'Bullpen'];
 
   const players = defenseSlots
     .map((slot) => roster[slot])
@@ -235,6 +218,24 @@ export default function SportGame() {
 
   const sport = sports[sportKey];
 
+  const [draftPool, setDraftPool] = useState<'all' | 'featured'>('all');
+
+  function getNextRandomSeason(pool = draftPool) {
+    if (pool === 'featured') {
+      return getRandomFeaturedSeason(sportKey);
+    }
+
+    return getRandomSeason(sportKey);
+  }
+
+  function getNextRandomSeasonByTeam(team: string, pool = draftPool) {
+    if (pool === 'featured') {
+      return getRandomFeaturedSeasonByTeam(sportKey, team);
+    }
+
+    return getRandomSeasonByTeam(sportKey, team);
+  }
+
   const [selectedSeason, setSelectedSeason] = useState<SeasonTeam>(() =>
     getRandomSeason(sportKey)
   );
@@ -245,15 +246,9 @@ export default function SportGame() {
   const [reSpins, setReSpins] = useState<number>(sport.reSpins);
   const [finalRecord, setFinalRecord] = useState<string | null>(null);
   const [finalRating, setFinalRating] = useState<number | null>(null);
-  const [finalOffenseRating, setFinalOffenseRating] = useState<number | null>(
-    null
-  );
-  const [finalDefenseRating, setFinalDefenseRating] = useState<number | null>(
-    null
-  );
-  const [perfectSeasonChance, setPerfectSeasonChance] = useState<number | null>(
-    null
-  );
+  const [finalOffenseRating, setFinalOffenseRating] = useState<number | null>(null);
+  const [finalDefenseRating, setFinalDefenseRating] = useState<number | null>(null);
+  const [perfectSeasonChance, setPerfectSeasonChance] = useState<number | null>(null);
 
   const [userRoster, setUserRoster] = useState<Record<string, Player | null>>(
     () => createEmptyRoster(sport.roster)
@@ -287,7 +282,7 @@ export default function SportGame() {
   }
 
   function resetGame(nextMode = mode) {
-    setSelectedSeason(getRandomSeason(sportKey));
+    setSelectedSeason(getNextRandomSeason());
     setReSpins(nextMode === 'ultimate' ? 0 : sport.reSpins);
     clearResults();
     resetRoster();
@@ -295,17 +290,21 @@ export default function SportGame() {
 
   function reSpinTeam() {
     if (currentReSpins <= 0) return;
-
-    setSelectedSeason(getRandomSeason(sportKey));
+    setSelectedSeason(getNextRandomSeason());
     setReSpins((current) => Math.max(current - 1, 0));
     clearResults();
   }
 
   function reSpinYear() {
     if (currentReSpins <= 0) return;
-
-    setSelectedSeason(getRandomSeasonByTeam(sportKey, selectedSeason.team));
+    setSelectedSeason(getNextRandomSeasonByTeam(selectedSeason.team));
     setReSpins((current) => Math.max(current - 1, 0));
+    clearResults();
+  }
+
+  function switchDraftPool(nextPool: 'all' | 'featured') {
+    setDraftPool(nextPool);
+    setSelectedSeason(getNextRandomSeason(nextPool));
     clearResults();
   }
 
@@ -333,7 +332,7 @@ export default function SportGame() {
       [slot]: player,
     }));
 
-    setSelectedSeason(getRandomSeason(sportKey));
+    setSelectedSeason(getNextRandomSeason());
     clearResults();
   }
 
@@ -352,6 +351,7 @@ export default function SportGame() {
     const rosterRating = calculateRosterRating(userRoster);
     const offenseRating = calculateOffenseRating(sportKey, userRoster);
     const defenseRating = calculateDefenseRating(sportKey, userRoster);
+
     const result = calculateSeasonResult(
       sportKey,
       rosterRating,
@@ -373,6 +373,7 @@ export default function SportGame() {
 
     const shareText = `THE PERFECT SEASON
 ${sport.name} ${mode === 'ultimate' ? 'Ultimate Mode' : 'Casual Mode'}
+Draft Pool: ${draftPool === 'featured' ? 'Featured Teams Only' : 'All Teams'}
 Final Record: ${finalRecord}
 Overall Rating: ${finalRating}
 Offense Rating: ${finalOffenseRating}
@@ -405,7 +406,7 @@ Play now: https://the-perfect-season-v2.vercel.app`;
 
         <div className="buttons">
           <button
-            className="btn"
+            className={mode === 'casual' ? 'btn' : 'btn secondary'}
             onClick={() => {
               setMode('casual');
               resetGame('casual');
@@ -415,13 +416,29 @@ Play now: https://the-perfect-season-v2.vercel.app`;
           </button>
 
           <button
-            className="btn secondary"
+            className={mode === 'ultimate' ? 'btn' : 'btn secondary'}
             onClick={() => {
               setMode('ultimate');
               resetGame('ultimate');
             }}
           >
             Ultimate Mode
+          </button>
+        </div>
+
+        <div className="buttons">
+          <button
+            className={draftPool === 'all' ? 'btn' : 'btn secondary'}
+            onClick={() => switchDraftPool('all')}
+          >
+            All Teams
+          </button>
+
+          <button
+            className={draftPool === 'featured' ? 'btn' : 'btn secondary'}
+            onClick={() => switchDraftPool('featured')}
+          >
+            Featured Teams Only
           </button>
         </div>
       </section>
@@ -440,6 +457,8 @@ Play now: https://the-perfect-season-v2.vercel.app`;
           </p>
 
           <div className="draw">{selectedSeason.displayName}</div>
+
+          {selectedSeason.isFeatured && <span className="pill">Featured Roster</span>}
 
           <p className="muted" style={{ color: colors.text }}>
             Pick {filledSlots + 1} of {totalSlots}. Choose one player from the{' '}
@@ -486,7 +505,6 @@ Play now: https://the-perfect-season-v2.vercel.app`;
                   }}
                 >
                   <strong>{player.name}</strong>
-
                   <p className="small">
                     {player.position} • Rating {player.rating}
                   </p>
@@ -553,9 +571,7 @@ Play now: https://the-perfect-season-v2.vercel.app`;
             </button>
           </div>
 
-          {!rosterIsFull && (
-            <p className="small">Fill every roster slot to simulate.</p>
-          )}
+          {!rosterIsFull && <p className="small">Fill every roster slot to simulate.</p>}
 
           {finalRecord && (
             <div
@@ -592,15 +608,6 @@ Play now: https://the-perfect-season-v2.vercel.app`;
               <p className="small" style={{ color: colors.text }}>
                 Perfect Season Chance: {perfectSeasonChance}%
               </p>
-
-              <div className="mode-list">
-                {sport.roster.map((slot) => (
-                  <div key={`share-${slot}`} className="card">
-                    <strong>{slot}</strong>
-                    <p className="small">{userRoster[slot]?.name}</p>
-                  </div>
-                ))}
-              </div>
 
               <button className="btn" onClick={copyShareText}>
                 Copy Share Card
