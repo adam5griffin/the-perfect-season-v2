@@ -817,3 +817,204 @@ button.card {
     width: 100%;
   }
 }
+/* Luxury game page redesign */
+
+.game-shell {
+  display: grid;
+  grid-template-columns: 340px minmax(0, 1fr) 390px;
+  gap: 22px;
+  align-items: start;
+  margin-top: 28px;
+}
+
+.draw-box {
+  position: sticky;
+  top: 24px;
+  min-height: auto;
+  border-radius: 28px;
+  padding: 24px;
+  overflow: hidden;
+  background: linear-gradient(145deg, rgba(15, 18, 28, 0.96), rgba(8, 10, 16, 0.96));
+  box-shadow:
+    0 28px 90px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.draw {
+  font-size: clamp(28px, 3.1vw, 44px);
+  line-height: 1.02;
+  font-weight: 900;
+  letter-spacing: -1.5px;
+  text-transform: none;
+  margin: 18px 0;
+  word-break: normal;
+  overflow-wrap: anywhere;
+  max-width: 100%;
+}
+
+.draw-box .muted,
+.draw-box .small {
+  font-size: 13px;
+  line-height: 1.45;
+  opacity: 0.92;
+}
+
+.game-shell > .card {
+  border-radius: 28px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.035));
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.28);
+}
+
+.game-shell h2 {
+  font-size: 23px;
+  letter-spacing: -0.5px;
+  margin-bottom: 16px;
+}
+
+.mode-list {
+  display: grid;
+  gap: 10px;
+}
+
+.mode-list .card,
+.mode-list button.card {
+  border-radius: 18px;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.065);
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  box-shadow: none;
+}
+
+.mode-list button.card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(245, 197, 66, 0.45);
+  background: rgba(255, 255, 255, 0.105);
+}
+
+.game-shell strong {
+  font-size: 15px;
+  letter-spacing: -0.2px;
+}
+
+.game-shell .small {
+  font-size: 12.5px;
+  margin: 5px 0 0;
+}
+
+.game-shell .buttons {
+  gap: 9px;
+}
+
+.game-shell .btn {
+  min-height: 38px;
+  padding: 10px 15px;
+  font-size: 12px;
+  letter-spacing: 0.2px;
+}
+
+.section {
+  max-width: 1160px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.section h1 {
+  font-size: clamp(38px, 5vw, 64px);
+  line-height: 0.95;
+  max-width: 900px;
+}
+
+.section .subtitle {
+  max-width: 760px;
+  font-size: 18px;
+}
+
+.pill {
+  font-size: 10px;
+  padding: 6px 10px;
+  letter-spacing: 0.9px;
+}
+
+.game-shell > .card:last-child > p.small {
+  display: inline-flex;
+  margin: 4px 6px 8px 0;
+  padding: 7px 9px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Luxury player card feel */
+
+button.card {
+  text-align: left;
+  color: #ffffff;
+  cursor: pointer;
+  transition:
+    transform 0.18s ease,
+    border-color 0.18s ease,
+    background 0.18s ease;
+}
+
+.card {
+  backdrop-filter: blur(10px);
+}
+
+/* Cleaner overall page spacing */
+
+.page {
+  padding: 34px;
+}
+
+/* Mobile luxury layout */
+
+@media (max-width: 1180px) {
+  .game-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .draw-box {
+    position: static;
+  }
+}
+
+@media (max-width: 768px) {
+  .page {
+    padding: 18px;
+  }
+
+  .section h1 {
+    font-size: 38px;
+    letter-spacing: -1.5px;
+  }
+
+  .section .subtitle {
+    font-size: 16px;
+  }
+
+  .draw {
+    font-size: 32px;
+    letter-spacing: -1px;
+    line-height: 1.05;
+  }
+
+  .draw-box,
+  .game-shell > .card {
+    border-radius: 22px;
+    padding: 18px;
+  }
+
+  .game-shell {
+    gap: 16px;
+  }
+
+  .game-shell .buttons {
+    width: 100%;
+  }
+
+  .game-shell .btn {
+    width: 100%;
+  }
+}
