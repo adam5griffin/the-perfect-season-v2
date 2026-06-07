@@ -13,6 +13,7 @@ export type SeasonTeam = {
   year: number;
   team: string;
   displayName: string;
+  isFeatured?: boolean;
   players: Player[];
 };
 
@@ -258,6 +259,7 @@ function generateLeagueSeasons(
       year,
       team,
       displayName: `${year} ${team}`,
+      isFeatured: false,
       players: createPlaceholderPlayers(sport, team, year),
     }))
   );
@@ -270,6 +272,7 @@ const featuredSeasons: SeasonTeam[] = [
     year: 2001,
     team: 'Los Angeles Lakers',
     displayName: '2001 Los Angeles Lakers',
+    isFeatured: true,
     players: [
       createPlayer("Shaquille O'Neal", 'C', 99, { ppg: 28.7, rpg: 12.7 }),
       createPlayer('Kobe Bryant', 'SG', 98, { ppg: 28.5, apg: 5.0 }),
@@ -286,6 +289,7 @@ const featuredSeasons: SeasonTeam[] = [
     year: 2017,
     team: 'Golden State Warriors',
     displayName: '2017 Golden State Warriors',
+    isFeatured: true,
     players: [
       createPlayer('Stephen Curry', 'PG', 99),
       createPlayer('Klay Thompson', 'SG', 94),
@@ -302,6 +306,7 @@ const featuredSeasons: SeasonTeam[] = [
     year: 2007,
     team: 'New England Patriots',
     displayName: '2007 New England Patriots',
+    isFeatured: true,
     players: [
       createPlayer('Tom Brady', 'QB', 99),
       createPlayer('Laurence Maroney', 'RB', 83),
@@ -319,6 +324,7 @@ const featuredSeasons: SeasonTeam[] = [
     year: 2019,
     team: 'Kansas City Chiefs',
     displayName: '2019 Kansas City Chiefs',
+    isFeatured: true,
     players: [
       createPlayer('Patrick Mahomes', 'QB', 99),
       createPlayer('Damien Williams', 'RB', 84),
@@ -336,6 +342,7 @@ const featuredSeasons: SeasonTeam[] = [
     year: 2025,
     team: 'Los Angeles Dodgers',
     displayName: '2025 Los Angeles Dodgers',
+    isFeatured: true,
     players: [
       createPlayer('Will Smith', 'C', 89),
       createPlayer('Freddie Freeman', '1B', 94),
@@ -361,6 +368,7 @@ const featuredSeasons: SeasonTeam[] = [
     year: 1998,
     team: 'New York Yankees',
     displayName: '1998 New York Yankees',
+    isFeatured: true,
     players: [
       createPlayer('Jorge Posada', 'C', 87),
       createPlayer('Tino Martinez', '1B', 88),
@@ -417,6 +425,38 @@ export function getRandomSeasonByTeam(
 
   if (seasons.length === 0) {
     return getRandomSeason(sport);
+  }
+
+  return seasons[Math.floor(Math.random() * seasons.length)];
+}
+
+export function getFeaturedSeasonsBySport(sport: SportKey): SeasonTeam[] {
+  return seasonDatabase.filter(
+    (season) => season.sport === sport && season.isFeatured
+  );
+}
+
+export function getRandomFeaturedSeason(sport: SportKey): SeasonTeam {
+  const seasons = getFeaturedSeasonsBySport(sport);
+
+  if (seasons.length === 0) {
+    return getRandomSeason(sport);
+  }
+
+  return seasons[Math.floor(Math.random() * seasons.length)];
+}
+
+export function getRandomFeaturedSeasonByTeam(
+  sport: SportKey,
+  team: string
+): SeasonTeam {
+  const seasons = seasonDatabase.filter(
+    (season) =>
+      season.sport === sport && season.team === team && season.isFeatured
+  );
+
+  if (seasons.length === 0) {
+    return getRandomFeaturedSeason(sport);
   }
 
   return seasons[Math.floor(Math.random() * seasons.length)];
