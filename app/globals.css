@@ -3191,3 +3191,227 @@ button.card {
 .player-option:disabled * {
   cursor: not-allowed !important;
 }
+/* Premium stat player cards */
+
+.player-stat-card {
+  width: 100%;
+  text-align: left;
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 18px;
+  padding: 14px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.105), rgba(255, 255, 255, 0.045));
+  box-shadow: 0 16px 42px rgba(0, 0, 0, 0.22);
+  position: relative;
+  overflow: hidden;
+  transition:
+    transform 0.18s ease,
+    border-color 0.18s ease,
+    background 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.player-stat-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at top right, rgba(245, 197, 66, 0.18), transparent 34%),
+    linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.055), transparent);
+  opacity: 0;
+  transition: opacity 0.18s ease;
+  pointer-events: none;
+}
+
+.player-stat-card:hover {
+  transform: translateY(-3px) scale(1.01);
+  border-color: rgba(245, 197, 66, 0.58);
+  box-shadow:
+    0 0 0 1px rgba(245, 197, 66, 0.28),
+    0 22px 55px rgba(0, 0, 0, 0.35);
+}
+
+.player-stat-card:hover::before {
+  opacity: 1;
+}
+
+.player-stat-card:disabled {
+  transform: none;
+}
+
+.player-card-top {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.player-card-top strong {
+  display: block;
+  font-size: 15px;
+  line-height: 1.08;
+}
+
+.player-card-top p {
+  margin: 5px 0 0;
+  color: #aeb8c8;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.player-tier-badge {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  padding: 5px 8px;
+  font-size: 9px;
+  font-weight: 1000;
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+  color: #07101f;
+  background: #f5c542;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.player-rating-bar {
+  position: relative;
+  z-index: 2;
+  height: 7px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.player-rating-bar span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #f5c542, #ffffff);
+  box-shadow: 0 0 18px rgba(245, 197, 66, 0.45);
+}
+
+.player-stat-grid {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+}
+
+.player-stat-grid div {
+  padding: 7px 5px;
+  border-radius: 11px;
+  background: rgba(0, 0, 0, 0.24);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  text-align: center;
+}
+
+.player-stat-grid span {
+  display: block;
+  color: #aeb8c8;
+  font-size: 7.5px;
+  font-weight: 1000;
+  text-transform: uppercase;
+  letter-spacing: 0.45px;
+  margin-bottom: 3px;
+}
+
+.player-stat-grid strong {
+  display: block;
+  color: #ffffff;
+  font-size: 11px;
+  line-height: 1;
+}
+
+.player-no-stats,
+.player-card-note {
+  position: relative;
+  z-index: 2;
+  margin: 8px 0 0;
+  color: #aeb8c8;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.tier-legend {
+  border-color: rgba(255, 215, 0, 0.5);
+}
+
+.tier-legend .player-tier-badge {
+  background: linear-gradient(135deg, #fff1a8, #f5c542);
+}
+
+.tier-elite .player-tier-badge {
+  background: linear-gradient(135deg, #ffffff, #f5c542);
+}
+
+.tier-star .player-tier-badge {
+  background: linear-gradient(135deg, #f5c542, #ff9f1c);
+}
+
+.tier-starter .player-tier-badge {
+  background: linear-gradient(135deg, #d8deea, #ffffff);
+}
+
+.tier-role .player-tier-badge {
+  background: rgba(255, 255, 255, 0.78);
+}
+
+@media (min-width: 1200px) {
+  .player-stat-card {
+    padding: 10px;
+    border-radius: 13px;
+  }
+
+  .player-card-top {
+    margin-bottom: 7px;
+  }
+
+  .player-card-top strong {
+    font-size: 12.5px;
+  }
+
+  .player-card-top p {
+    font-size: 9.5px;
+  }
+
+  .player-tier-badge {
+    font-size: 7px;
+    padding: 4px 6px;
+  }
+
+  .player-rating-bar {
+    height: 5px;
+    margin-bottom: 8px;
+  }
+
+  .player-stat-grid {
+    gap: 4px;
+  }
+
+  .player-stat-grid div {
+    padding: 5px 3px;
+    border-radius: 8px;
+  }
+
+  .player-stat-grid span {
+    font-size: 6px;
+  }
+
+  .player-stat-grid strong {
+    font-size: 9px;
+  }
+}
+
+@media (max-width: 768px) {
+  .player-stat-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
