@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useParams } from 'next/navigation';
 import Nav from '../../../components/Nav';
 import SportSurface from '../../../components/SportSurface';
+import PlayerCard from '../../../components/PlayerCard';
 import { getTeamColors } from '../../../lib/teamColors';
 import { getTeamWordmark } from '../../../lib/teamFonts';
 import {
@@ -280,6 +281,13 @@ export default function SportGame() {
     currentDefenseRating
   );
 
+  const cursorClass =
+    sportKey === 'nba'
+      ? 'cursor-basketball'
+      : sportKey === 'mlb'
+      ? 'cursor-baseball'
+      : 'cursor-football';
+
   function resetRoster() {
     setUserRoster(createEmptyRoster(sport.roster));
   }
@@ -463,13 +471,6 @@ Play now: https://the-perfect-season-v2.vercel.app`;
     alert('Share card copied!');
   }
 
-  const cursorClass =
-    sportKey === 'nba'
-      ? 'cursor-basketball'
-      : sportKey === 'mlb'
-      ? 'cursor-baseball'
-      : 'cursor-football';
-
   return (
     <main className="page">
       <Nav />
@@ -614,40 +615,16 @@ Play now: https://the-perfect-season-v2.vercel.app`;
               const beingSelected = selectedPlayerName === player.name;
 
               return (
-                <button
+                <PlayerCard
                   key={`${selectedSeason.id}-${player.name}`}
-                  className={`card player-option ${cursorClass} ${
-                    beingSelected ? 'player-option-selected' : ''
-                  }`}
-                  onClick={() => selectPlayer(player)}
-                  disabled={alreadySelected || beingSelected || isShuffling}
-                  style={{
-                    textAlign: 'left',
-                    color: 'white',
-                    cursor:
-                      alreadySelected || beingSelected || isShuffling
-                        ? 'not-allowed'
-                        : undefined,
-                    opacity: alreadySelected ? 0.5 : 1,
-                  }}
-                >
-                  <strong>{player.name}</strong>
-
-                  <p className="small">
-                    {player.position} • Rating {player.rating}
-                  </p>
-
-                  {player.stats && (
-                    <p className="small">
-                      {Object.entries(player.stats)
-                        .map(([key, value]) => `${key.toUpperCase()}: ${value}`)
-                        .join(' • ')}
-                    </p>
-                  )}
-
-                  {beingSelected && <p className="small">Adding to roster...</p>}
-                  {alreadySelected && <p className="small">Already selected</p>}
-                </button>
+                  player={player}
+                  sportKey={sportKey}
+                  alreadySelected={alreadySelected}
+                  beingSelected={beingSelected}
+                  isShuffling={isShuffling}
+                  cursorClass={cursorClass}
+                  onSelect={() => selectPlayer(player)}
+                />
               );
             })}
           </div>
